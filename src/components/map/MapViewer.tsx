@@ -5,7 +5,7 @@ import { Map as MapLibreMap, Marker, NavigationControl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { CircuitStop } from "@/types/moxotoro";
 import geojsonData from "@/data/camino_real.geojson";
-import { getCircuitStops } from "@/lib/circuit";
+import { getCircuitMapView, getCircuitStops } from "@/lib/circuit";
 import { Navigation, Compass } from "lucide-react";
 
 interface MapViewerProps {
@@ -14,6 +14,7 @@ interface MapViewerProps {
 }
 
 const STOPS = getCircuitStops();
+const { center: INITIAL_CENTER, zoom: INITIAL_ZOOM } = getCircuitMapView();
 
 export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectStop }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -30,10 +31,8 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
-    // Center coordinates around Plaza San Martin / Camino Real La Caldera
-    const initialCenter: [number, number] = [-65.381, -24.599];
-
     // OpenStreetMap raster basemap (sin API key)
+    // MapLibre center / setLngLat expect [longitude, latitude] (same order as GeoJSON).
     const map = new MapLibreMap({
       container: mapContainerRef.current,
       style: {
@@ -58,8 +57,8 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
           },
         ],
       },
-      center: initialCenter,
-      zoom: 14.5,
+      center: INITIAL_CENTER,
+      zoom: INITIAL_ZOOM,
       pitch: 35, // 3D perspective to emphasize the valley and terrain
     });
 
@@ -136,14 +135,14 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
         el.addEventListener("click", () => {
           onSelectStopRef.current(stop);
           map.flyTo({
-            center: stop.coordinates,
-            zoom: 16,
+            center: stop.coordinates, // [lng, lat]
+            zoom: 16.5,
             duration: 1200,
           });
         });
 
         const marker = new Marker({ element: el })
-          .setLngLat(stop.coordinates)
+          .setLngLat(stop.coordinates) // [lng, lat]
           .addTo(map);
 
         markersRef.current[stop.id] = marker;
@@ -164,8 +163,8 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
     const target = STOPS.find((s) => s.id === selectedStopId);
     if (target) {
       mapRef.current.flyTo({
-        center: target.coordinates,
-        zoom: 16,
+        center: target.coordinates, // [lng, lat]
+        zoom: 16.5,
         duration: 1200,
       });
     }
@@ -174,8 +173,8 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
   const resetView = () => {
     if (!mapRef.current) return;
     mapRef.current.flyTo({
-      center: [-65.381, -24.599],
-      zoom: 14.5,
+      center: INITIAL_CENTER,
+      zoom: INITIAL_ZOOM,
       pitch: 35,
       duration: 1200,
     });
