@@ -9,7 +9,16 @@
     "difficulty": "Baja",
     "elevationGainMeters": 75,
     "certification": "Resolución Nº 216/17 Ministerio de Turismo de Salta",
-    "standards": "Normas IRAM-SECTUR / ISO 9001"
+    "standards": "Normas IRAM-SECTUR / ISO 9001",
+    "crs": "WGS84 GeoJSON [longitude, latitude]",
+    "coordinateSources": {
+      "stop-1": "Interpreted meeting point ~200 m ESE of Plaza San Martín on the urban street toward Río La Caldera (in-town, not the distant northern river Nominatim hits). OSM has no Paseo Costanera node in the village core; Avenida Costanera lies ~800 m south.",
+      "stop-2": "OSM node 11111008616 'El Camino real' restaurant on Avenida General Güemes — marker for the historic corridor between the riverside approach and the plaza.",
+      "stop-3": "OSM way 195951136 Plaza San Martín (Nominatim centroid).",
+      "stop-4": "OSM way 195951139 Iglesia Nuestra Señora del Rosario (Nominatim centroid).",
+      "stop-5": "OSM node 3140577188 tourism=attraction 'Cristo Redentor' (Cristo Penitente).",
+      "stop-walpac": "Google Maps place 'Walpaq Arte Latinoamericano, La Casa de Los Pájaros (Sol Rojo Casa/Galería/Taller)' confirmed by operator: [-65.3921144, -24.6193213] (~2.2 km SSW of Plaza San Martín). Complementary marker only — not on the main trail-path."
+    }
   },
   "features": [
     {
@@ -28,7 +37,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-65.3785, -24.6025]
+        "coordinates": [-65.37866, -24.60283]
       }
     },
     {
@@ -47,7 +56,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-65.3802, -24.6008]
+        "coordinates": [-65.3791049, -24.6016845]
       }
     },
     {
@@ -66,7 +75,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-65.3815, -24.5992]
+        "coordinates": [-65.3805989, -24.6025646]
       }
     },
     {
@@ -85,7 +94,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-65.3820, -24.5986]
+        "coordinates": [-65.3817163, -24.602134]
       }
     },
     {
@@ -104,7 +113,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-65.3838, -24.5954]
+        "coordinates": [-65.3837544, -24.5990084]
       }
     },
     {
@@ -112,18 +121,19 @@
       "properties": {
         "id": "stop-walpac",
         "order": 6,
-        "name": "Casa de los Pájaros — Obra Walpac",
-        "subtitle": "Experiencia Complementaria / Alianza Activa",
+        "name": "Casa de los Pájaros — Walpaq Arte Latinoamericano",
+        "subtitle": "Sol Rojo Casa / Galería / Taller · Extensión Complementaria",
         "description": "Extensión contemplativa y artística. Visita al taller del artista Walpac, autor de los célebres murales de aves y coplas que enriquecen la narrativa del territorio caldereño.",
         "duration": "35 min",
         "elevation": "1.430 msnm",
         "image": "/assets/circuits/casa-de-los-pajaros-walpac.webp",
         "isComplementary": true,
-        "type": "stop"
+        "type": "stop",
+        "coordinatePrecision": "operator-confirmed"
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-65.3795, -24.5978]
+        "coordinates": [-65.3921144, -24.6193213]
       }
     },
     {
@@ -136,15 +146,18 @@
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-65.3785, -24.6025],
-          [-65.3792, -24.6018],
-          [-65.3802, -24.6008],
-          [-65.3809, -24.6000],
-          [-65.3815, -24.5992],
-          [-65.3820, -24.5986],
-          [-65.3826, -24.5975],
-          [-65.3832, -24.5964],
-          [-65.3838, -24.5954]
+          [-65.37866, -24.60283],
+          [-65.3789, -24.60222],
+          [-65.3791049, -24.6016845],
+          [-65.37985, -24.60212],
+          [-65.3805989, -24.6025646],
+          [-65.38116, -24.60235],
+          [-65.3817163, -24.602134],
+          [-65.382006, -24.601145],
+          [-65.382832, -24.600702],
+          [-65.383617, -24.600315],
+          [-65.38372, -24.59955],
+          [-65.3837544, -24.5990084]
         ]
       }
     }
