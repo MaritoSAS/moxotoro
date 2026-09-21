@@ -1,0 +1,152 @@
+{
+  "type": "FeatureCollection",
+  "name": "Camino Real La Caldera - MOXOTORO",
+  "metadata": {
+    "circuit": "Camino Real & Qhapaq Ñan",
+    "location": "La Caldera, Salta, Argentina",
+    "distanceMeters": 2800,
+    "durationMinutes": 105,
+    "difficulty": "Baja",
+    "elevationGainMeters": 75,
+    "certification": "Resolución Nº 216/17 Ministerio de Turismo de Salta",
+    "standards": "Normas IRAM-SECTUR / ISO 9001"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stop-1",
+        "order": 1,
+        "name": "Paseo Costanera La Caldera",
+        "subtitle": "Punto de Encuentro y Río Caldera",
+        "description": "Comienzo del circuito en la ribera del río. Bienvenida interpretativa sobre la geografía del Valle de Siancas y el rol histórico de las aguas en las rutas comerciales del norte.",
+        "duration": "15 min",
+        "elevation": "1.410 msnm",
+        "image": "/assets/circuits/camino-real-valle.webp",
+        "isComplementary": false,
+        "type": "stop"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3785, -24.6025]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stop-2",
+        "order": 2,
+        "name": "Antiguo Camino Real",
+        "subtitle": "Huellas Coloniales y Qhapaq Ñan",
+        "description": "Caminata por el trazado histórico donde confluían arrieros, comerciantes y viajeros del Alto Perú. Observación de arquitectura tradicional con galerías techadas y morteros de piedra.",
+        "duration": "25 min",
+        "elevation": "1.418 msnm",
+        "image": "/assets/circuits/antiguo-camino-real.webp",
+        "isComplementary": false,
+        "type": "stop"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3802, -24.6008]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stop-3",
+        "order": 3,
+        "name": "Plaza General San Martín",
+        "subtitle": "Corazón Cívico y Cultura Local",
+        "description": "Pausa en la plaza central de La Caldera, rodeada de jardines nativos, pimenteros y árboles añosos. Historias de las familias fundadoras y los artesanos del pueblo.",
+        "duration": "15 min",
+        "elevation": "1.422 msnm",
+        "image": "/assets/circuits/plaza-san-martin.webp",
+        "isComplementary": false,
+        "type": "stop"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3815, -24.5992]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stop-4",
+        "order": 4,
+        "name": "Parroquia Nuestra Señora del Rosario",
+        "subtitle": "Patrimonio Histórico del Siglo XVIII",
+        "description": "Joya arquitectónica declarada Monumento Histórico. Fachada blanca con cornisas doradas, campanario tradicional y muros de adobe que custodian siglos de fe y memoria comunitaria.",
+        "duration": "20 min",
+        "elevation": "1.425 msnm",
+        "image": "/assets/circuits/parroquia-rosario.webp",
+        "isComplementary": false,
+        "type": "stop"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3820, -24.5986]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stop-5",
+        "order": 5,
+        "name": "Monumento al Cristo Redentor",
+        "subtitle": "Cima Panorámica y Cierre Patrimonial",
+        "description": "Ascenso suave al cerro para contemplar la imponente escultura del Cristo Redentor y una vista panorámica de 360 grados sobre el valle, los campos y las yungas salteñas.",
+        "duration": "30 min",
+        "elevation": "1.485 msnm",
+        "image": "/assets/circuits/cristo-redentor-vista.webp",
+        "isComplementary": false,
+        "type": "stop"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3838, -24.5954]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stop-walpac",
+        "order": 6,
+        "name": "Casa de los Pájaros — Obra Walpac",
+        "subtitle": "Experiencia Complementaria / Alianza Activa",
+        "description": "Extensión contemplativa y artística. Visita al taller del artista Walpac, autor de los célebres murales de aves y coplas que enriquecen la narrativa del territorio caldereño.",
+        "duration": "35 min",
+        "elevation": "1.430 msnm",
+        "image": "/assets/circuits/casa-de-los-pajaros-walpac.webp",
+        "isComplementary": true,
+        "type": "stop"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3795, -24.5978]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "trail-path",
+        "name": "Sendero Guiado Camino Real",
+        "type": "trail"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-65.3785, -24.6025],
+          [-65.3792, -24.6018],
+          [-65.3802, -24.6008],
+          [-65.3809, -24.6000],
+          [-65.3815, -24.5992],
+          [-65.3820, -24.5986],
+          [-65.3826, -24.5975],
+          [-65.3832, -24.5964],
+          [-65.3838, -24.5954]
+        ]
+      }
+    }
+  ]
+}
