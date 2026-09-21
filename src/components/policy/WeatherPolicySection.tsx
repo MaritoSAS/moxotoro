@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { CloudRain, ShieldCheck, RefreshCw, Layers, AlertTriangle, ArrowRight, RotateCcw, CheckCircle2, History } from "lucide-react";
+import { CloudRain, ShieldCheck, RefreshCw, History, RotateCcw, CheckCircle2 } from "lucide-react";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
 import { BookingStatus } from "@/types/moxotoro";
 
 export const WeatherPolicySection: React.FC = () => {
   // Simulator state for demo and challenge evaluation
   const [simulatedStatus, setSimulatedStatus] = useState<BookingStatus>("deposit_paid");
-  const [incidentStep, setIncidentStep] = useState<number>(0);
   const [incidentLog, setIncidentLog] = useState<string[]>([
     "Reserva creada con seña del 50% acreditada vía Stellar (Estado: 🟡 Con seña).",
   ]);
@@ -20,7 +19,6 @@ export const WeatherPolicySection: React.FC = () => {
 
   const triggerWeatherAlert = () => {
     setSimulatedStatus("weather_suspended");
-    setIncidentStep(1);
     appendLog(
       "🌧️ ALERTA METEOROLÓGICA: Lluvias torrenciales en el Valle de Siancas. Actividad suspendida por seguridad.",
       "Iniciando Protocolo de 3 Instancias (NO se cancela automáticamente).",
@@ -29,7 +27,6 @@ export const WeatherPolicySection: React.FC = () => {
 
   const offerReschedule = () => {
     setSimulatedStatus("reschedule_offered");
-    setIncidentStep(2);
     appendLog(
       "🔄 PASO 1 (Prioridad): Se ofreció al cliente reprogramar turno para el próximo sábado conservando el 100% de la seña.",
     );
@@ -37,7 +34,6 @@ export const WeatherPolicySection: React.FC = () => {
 
   const acceptReschedule = () => {
     setSimulatedStatus("rescheduled");
-    setIncidentStep(0);
     appendLog(
       "🟢 RESOLUCIÓN PASO 1: Cliente aceptó nueva fecha. Seña transferida con éxito. Estado: 🟢 Reprogramada.",
     );
@@ -45,7 +41,6 @@ export const WeatherPolicySection: React.FC = () => {
 
   const offerAlternative = () => {
     setSimulatedStatus("alternative_offered");
-    setIncidentStep(3);
     appendLog(
       "🟣 PASO 2: El cliente no puede en la nueva fecha. Se ofrece actividad alternativa en espacio cubierto (Masterclass y taller en Casa de los Pájaros con Walpac).",
     );
@@ -53,7 +48,6 @@ export const WeatherPolicySection: React.FC = () => {
 
   const acceptAlternative = () => {
     setSimulatedStatus("rescheduled");
-    setIncidentStep(0);
     appendLog(
       "🟢 RESOLUCIÓN PASO 2: Cliente aceptó experiencia alternativa. Seña aplicada. Estado: 🟢 Reprogramada.",
     );
@@ -61,7 +55,6 @@ export const WeatherPolicySection: React.FC = () => {
 
   const issueExceptionalRefund = () => {
     setSimulatedStatus("exceptional_refund");
-    setIncidentStep(0);
     appendLog(
       "🔴 PASO 3 (Último recurso): Tras agotar instancias 1 y 2 sin coincidencia justificada, se autorizó devolución excepcional de la seña.",
       "Registro inmutable emitido on-chain con hash de retorno en Stellar.",
@@ -70,7 +63,6 @@ export const WeatherPolicySection: React.FC = () => {
 
   const resetSimulator = () => {
     setSimulatedStatus("deposit_paid");
-    setIncidentStep(0);
     setIncidentLog([
       "Simulador reiniciado: Reserva creada con seña del 50% acreditada vía Stellar (Estado: 🟡 Con seña).",
     ]);

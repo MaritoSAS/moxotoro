@@ -2,7 +2,7 @@
 
 import React from "react";
 import { CircuitStop } from "@/types/moxotoro";
-import { Clock, Mountain, ArrowRight, CheckCircle, Sparkles } from "lucide-react";
+import { Clock, Mountain, ArrowRight } from "lucide-react";
 
 interface CircuitStopsProps {
   stops: CircuitStop[];

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import QRCode from "qrcode";
-import { Copy, Check, ExternalLink, Loader2, ShieldCheck, ArrowLeft, Zap, Sparkles } from "lucide-react";
+import { Copy, Check, Loader2, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import { Booking } from "@/types/moxotoro";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
 import { generateSep0007Uri, verifyTransactionByMemo } from "@/lib/stellar";

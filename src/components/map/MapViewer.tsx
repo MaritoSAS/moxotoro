@@ -1,38 +1,31 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Map as MapLibreMap, Marker, NavigationControl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import geojsonData from "@/data/camino_real.json";
 import { CircuitStop } from "@/types/moxotoro";
-import { MapPin, Navigation, Maximize2, Compass, Layers, CheckCircle2 } from "lucide-react";
+import geojsonData from "@/data/camino_real.geojson";
+import { getCircuitStops } from "@/lib/circuit";
+import { Navigation, Compass } from "lucide-react";
 
 interface MapViewerProps {
   selectedStopId: string | null;
   onSelectStop: (stop: CircuitStop) => void;
 }
 
+const STOPS = getCircuitStops();
+
 export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectStop }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<{ [id: string]: Marker }>({});
-  const [activeStop, setActiveStop] = useState<CircuitStop | null>(null);
+  const onSelectStopRef = useRef(onSelectStop);
 
-  // Extract stops from GeoJSON
-  const stops: CircuitStop[] = (geojsonData.features as any[])
-    .filter((f) => f.properties.type === "stop")
-    .map((f) => ({
-      id: f.properties.id,
-      order: f.properties.order,
-      name: f.properties.name,
-      subtitle: f.properties.subtitle,
-      description: f.properties.description,
-      duration: f.properties.duration,
-      elevation: f.properties.elevation,
-      image: f.properties.image,
-      isComplementary: f.properties.isComplementary,
-      coordinates: f.geometry.coordinates as [number, number],
-    }));
+  useEffect(() => {
+    onSelectStopRef.current = onSelectStop;
+  }, [onSelectStop]);
+
+  const activeStop = STOPS.find((stop) => stop.id === selectedStopId) ?? null;
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -40,7 +33,7 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
     // Center coordinates around Plaza San Martin / Camino Real La Caldera
     const initialCenter: [number, number] = [-65.381, -24.599];
 
-    // OpenStreetMap & Carto Positron basemap (Cero costo, cero API key)
+    // OpenStreetMap raster basemap (sin API key)
     const map = new MapLibreMap({
       container: mapContainerRef.current,
       style: {
@@ -49,12 +42,10 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
           "osm-tiles": {
             type: "raster",
             tiles: [
-              "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-              "https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-              "https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+              "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
             ],
             tileSize: 256,
-            attribution: "© OpenStreetMap contributors © CARTO",
+            attribution: "© OpenStreetMap contributors",
           },
         },
         layers: [
@@ -78,7 +69,7 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
       // 1. Add trail LineString
       map.addSource("camino-real-trail", {
         type: "geojson",
-        data: geojsonData as any,
+        data: geojsonData as GeoJSON.FeatureCollection,
       });
 
       // Trail outer glow / shadow
@@ -116,7 +107,7 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
       });
 
       // 2. Add custom markers for each stop
-      stops.forEach((stop) => {
+      STOPS.forEach((stop) => {
         const el = document.createElement("div");
         el.className = "custom-map-marker";
         el.style.width = "34px";
@@ -143,8 +134,7 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
         });
 
         el.addEventListener("click", () => {
-          onSelectStop(stop);
-          setActiveStop(stop);
+          onSelectStopRef.current(stop);
           map.flyTo({
             center: stop.coordinates,
             zoom: 16,
@@ -171,9 +161,8 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
   // When selectedStopId changes externally from the list
   useEffect(() => {
     if (!selectedStopId || !mapRef.current) return;
-    const target = stops.find((s) => s.id === selectedStopId);
+    const target = STOPS.find((s) => s.id === selectedStopId);
     if (target) {
-      setActiveStop(target);
       mapRef.current.flyTo({
         center: target.coordinates,
         zoom: 16,
@@ -190,7 +179,6 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
       pitch: 35,
       duration: 1200,
     });
-    setActiveStop(null);
   };
 
   return (
