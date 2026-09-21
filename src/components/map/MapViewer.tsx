@@ -33,7 +33,7 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
     // Center coordinates around Plaza San Martin / Camino Real La Caldera
     const initialCenter: [number, number] = [-65.381, -24.599];
 
-    // OpenStreetMap & Carto Positron basemap (Cero costo, cero API key)
+    // OpenStreetMap raster basemap (sin API key)
     const map = new MapLibreMap({
       container: mapContainerRef.current,
       style: {
@@ -42,12 +42,10 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
           "osm-tiles": {
             type: "raster",
             tiles: [
-              "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-              "https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-              "https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+              "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
             ],
             tileSize: 256,
-            attribution: "© OpenStreetMap contributors © CARTO",
+            attribution: "© OpenStreetMap contributors",
           },
         },
         layers: [
