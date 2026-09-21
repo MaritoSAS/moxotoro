@@ -1,7 +1,5 @@
+import { HomeLanding } from "@/components/home/HomeLanding";
+
 export default function Home() {
-  return (
-    <main>
-      <div>Hello world!</div>
-    </main>
-  );
+  return <HomeLanding />;
 }

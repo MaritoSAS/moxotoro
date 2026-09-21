@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Compass, MapPin, Calendar, ShieldCheck, MessageCircle, Menu, X, ExternalLink } from "lucide-react";
+import { Calendar, MessageCircle, Menu, X } from "lucide-react";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
 
 interface NavbarProps {
