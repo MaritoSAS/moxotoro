@@ -17,7 +17,7 @@
       "stop-3": "OSM way 195951136 Plaza San Martín (Nominatim centroid).",
       "stop-4": "OSM way 195951139 Iglesia Nuestra Señora del Rosario (Nominatim centroid).",
       "stop-5": "OSM node 3140577188 tourism=attraction 'Cristo Redentor' (Cristo Penitente).",
-      "stop-walpac": "Approximate complementary offset in the town-center lots north-east of Plaza / Av. Güemes civic strip. OSM has no Casa de los Pájaros / Walpac node — operator GPS confirmation recommended. Not on the main trail-path."
+      "stop-walpac": "Google Maps place 'Walpaq Arte Latinoamericano, La Casa de Los Pájaros (Sol Rojo Casa/Galería/Taller)' confirmed by operator: [-65.3921144, -24.6193213] (~2.2 km SSW of Plaza San Martín). Complementary marker only — not on the main trail-path."
     }
   },
   "features": [
@@ -121,19 +121,19 @@
       "properties": {
         "id": "stop-walpac",
         "order": 6,
-        "name": "Casa de los Pájaros — Obra Walpac",
-        "subtitle": "Experiencia Complementaria / Alianza Activa",
+        "name": "Casa de los Pájaros — Walpaq Arte Latinoamericano",
+        "subtitle": "Sol Rojo Casa / Galería / Taller · Extensión Complementaria",
         "description": "Extensión contemplativa y artística. Visita al taller del artista Walpac, autor de los célebres murales de aves y coplas que enriquecen la narrativa del territorio caldereño.",
         "duration": "35 min",
         "elevation": "1.430 msnm",
         "image": "/assets/circuits/casa-de-los-pajaros-walpac.webp",
         "isComplementary": true,
         "type": "stop",
-        "coordinatePrecision": "approximate"
+        "coordinatePrecision": "operator-confirmed"
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-65.3788, -24.6007]
+        "coordinates": [-65.3921144, -24.6193213]
       }
     },
     {
