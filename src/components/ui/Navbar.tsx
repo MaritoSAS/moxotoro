@@ -39,6 +39,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6 text-sm">
+          <a href="#reservar" className="text-[#c4a962] hover:text-[#dfc888] transition-colors font-medium">
+            Reservas
+          </a>
           <a href="#circuito" className="text-[#e8e2d6] hover:text-[#c4a962] transition-colors">
             Circuito Camino Real
           </a>
@@ -92,6 +95,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
       {/* Mobile dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-[#c4a962]/20 bg-[#0d1b2a] px-4 py-4 space-y-3">
+          <a
+            href="#reservar"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-sm text-[#c4a962] font-medium"
+          >
+            Reservas
+          </a>
           <a
             href="#circuito"
             onClick={() => setMobileMenuOpen(false)}

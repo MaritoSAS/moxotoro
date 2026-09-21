@@ -3,13 +3,16 @@
 import React, { useCallback, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import {
-  Calendar,
+  CalendarDays,
   CheckCircle2,
+  Clock,
   Compass,
   MapPin,
   MessageCircle,
   ShieldCheck,
   Sparkles,
+  Sun,
+  Sunset,
   Users,
   Wallet,
 } from "lucide-react";
@@ -17,6 +20,7 @@ import { Navbar } from "@/components/ui/Navbar";
 import { CircuitStops } from "@/components/circuit/CircuitStops";
 import { WalpacExtension } from "@/components/circuit/WalpacExtension";
 import { WeatherPolicySection } from "@/components/policy/WeatherPolicySection";
+import { BookingCalendar } from "@/components/booking/BookingCalendar";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
 import { getCircuitStops, WALPAC_STOP_ID } from "@/lib/circuit";
 import {
@@ -24,7 +28,9 @@ import {
   calculateQuote,
   createPendingBooking,
   formatArs,
+  formatDateLongEs,
   getMinBookingDate,
+  isDateBookable,
 } from "@/lib/booking";
 import type { Booking, CircuitStop } from "@/types/moxotoro";
 
@@ -97,12 +103,12 @@ export const HomeLanding: React.FC = () => {
   }, []);
 
   const handleOpenBooking = () => {
-    scrollToId("reserva");
+    scrollToId("reservar");
   };
 
   const handleOpenBookingWithWalpac = () => {
     setIncludeWalpac(true);
-    scrollToId("reserva");
+    scrollToId("reservar");
   };
 
   const handleFocusWalpacOnMap = () => {
@@ -116,6 +122,11 @@ export const HomeLanding: React.FC = () => {
 
     if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() || !date) {
       setFormError("Completá nombre, correo, teléfono y fecha para generar la seña.");
+      return;
+    }
+
+    if (!isDateBookable(date)) {
+      setFormError("Elegí una fecha disponible en el calendario.");
       return;
     }
 
@@ -202,7 +213,7 @@ export const HomeLanding: React.FC = () => {
                 className="flex items-center gap-2 rounded-lg bg-[#c4a962] px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#0a0a0a] shadow-lg hover:bg-[#dfc888]"
               >
                 <Wallet className="h-4 w-4" />
-                Reservar seña en USDC
+                Reservá tu salida
               </button>
               <a
                 href="#circuito"
@@ -327,15 +338,82 @@ export const HomeLanding: React.FC = () => {
             </div>
 
             <form
-              id="reserva"
+              id="reservar"
               onSubmit={handleOpenCheckout}
               className="scroll-mt-24 grid grid-cols-1 gap-6 rounded-2xl border border-[#c4a962]/30 bg-[#0d1b2a]/90 p-6 shadow-2xl lg:grid-cols-12"
             >
               <div className="space-y-4 lg:col-span-7">
-                <h3 className="flex items-center gap-2 font-semibold text-[#f5f0e8]">
-                  <Calendar className="h-4 w-4 text-[#c4a962]" />
-                  Datos de la reserva
-                </h3>
+                <div>
+                  <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#c4a962]">
+                    <CalendarDays className="h-4 w-4" />
+                    Reservas con seña
+                  </p>
+                  <h3 className="mt-1 text-xl font-bold text-[#f5f0e8]">Reservá tu salida</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-[#9ca3af]">
+                    Elegí el día en el calendario y el turno mañana o tarde. Los días no disponibles
+                    quedan atenuados: el cupo cierra a las{" "}
+                    {MOXOTORO_CONFIG.capacity.cutoffHourPreviousDay}:00 del día anterior (hora
+                    Argentina).
+                  </p>
+                </div>
+
+                <BookingCalendar
+                  selectedDate={date}
+                  minDate={minDate}
+                  onSelectDate={(ymd) => {
+                    if (!isDateBookable(ymd)) return;
+                    setDate(ymd);
+                    setFormError(null);
+                  }}
+                />
+
+                <fieldset className="space-y-2">
+                  <legend className="flex items-center gap-2 text-sm font-semibold text-[#f5f0e8]">
+                    <Clock className="h-4 w-4 text-[#c4a962]" />
+                    Turno
+                  </legend>
+                  <div role="radiogroup" aria-label="Turno de salida" className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {MOXOTORO_CONFIG.capacity.timeSlots.map((slot) => {
+                      const isMorning = slot.id.includes("morning");
+                      const selected = timeSlotId === slot.id;
+                      return (
+                        <label
+                          key={slot.id}
+                          className={`flex cursor-pointer items-start gap-3 rounded-xl border px-3 py-3 transition-colors focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#c4a962] ${
+                            selected
+                              ? "border-[#c4a962] bg-[#0d3d47]/80"
+                              : "border-white/10 bg-[#0a0a0a]/60 hover:border-[#c4a962]/40"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="timeSlot"
+                            value={slot.id}
+                            checked={selected}
+                            onChange={() => setTimeSlotId(slot.id)}
+                            className="mt-1 accent-[#c4a962]"
+                          />
+                          <span className="min-w-0">
+                            <span className="flex items-center gap-1.5 text-sm font-semibold text-[#f5f0e8]">
+                              {isMorning ? (
+                                <Sun className="h-4 w-4 text-[#c4a962]" />
+                              ) : (
+                                <Sunset className="h-4 w-4 text-[#c4a962]" />
+                              )}
+                              {isMorning ? "Mañana" : "Tarde"}
+                            </span>
+                            <span className="mt-0.5 block text-[11px] text-[#9ca3af]">{slot.label}</span>
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </fieldset>
+
+                <p className="rounded-lg border border-[#c4a962]/20 bg-[#0d3d47]/40 px-3 py-2 text-xs text-[#e8e2d6]" aria-live="polite">
+                  Salida: <strong className="text-[#c4a962]">{formatDateLongEs(date)}</strong> ·{" "}
+                  {selectedSlot.label}
+                </p>
 
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <label className="text-xs text-[#9ca3af]">
@@ -346,6 +424,7 @@ export const HomeLanding: React.FC = () => {
                       onChange={(event) => setCustomerName(event.target.value)}
                       className={`${fieldClassName} mt-1`}
                       placeholder="Como figura en el documento"
+                      autoComplete="name"
                     />
                   </label>
                   <label className="text-xs text-[#9ca3af]">
@@ -357,6 +436,7 @@ export const HomeLanding: React.FC = () => {
                       onChange={(event) => setCustomerEmail(event.target.value)}
                       className={`${fieldClassName} mt-1`}
                       placeholder="tu@correo.com"
+                      autoComplete="email"
                     />
                   </label>
                   <label className="text-xs text-[#9ca3af]">
@@ -367,32 +447,8 @@ export const HomeLanding: React.FC = () => {
                       onChange={(event) => setCustomerPhone(event.target.value)}
                       className={`${fieldClassName} mt-1`}
                       placeholder="+54 9 387 …"
+                      autoComplete="tel"
                     />
-                  </label>
-                  <label className="text-xs text-[#9ca3af]">
-                    Fecha de salida
-                    <input
-                      required
-                      type="date"
-                      min={minDate}
-                      value={date}
-                      onChange={(event) => setDate(event.target.value)}
-                      className={`${fieldClassName} mt-1`}
-                    />
-                  </label>
-                  <label className="text-xs text-[#9ca3af]">
-                    Turno
-                    <select
-                      value={timeSlotId}
-                      onChange={(event) => setTimeSlotId(event.target.value)}
-                      className={`${fieldClassName} mt-1`}
-                    >
-                      {MOXOTORO_CONFIG.capacity.timeSlots.map((slot) => (
-                        <option key={slot.id} value={slot.id}>
-                          {slot.label}
-                        </option>
-                      ))}
-                    </select>
                   </label>
                   <label className="text-xs text-[#9ca3af]">
                     Participantes
@@ -484,7 +540,10 @@ export const HomeLanding: React.FC = () => {
                   <div className="rounded-lg border border-emerald-500/30 bg-emerald-950/40 p-3 text-xs text-emerald-200">
                     <p className="flex items-center gap-1.5 font-semibold">
                       <CheckCircle2 className="h-4 w-4" />
-                      Seña acreditada (demo / verificación)
+                      Seña acreditada. Cupo reservado.
+                    </p>
+                    <p className="mt-1">
+                      {formatDateLongEs(booking.date)} · {booking.timeSlotLabel}
                     </p>
                     <p className="mt-1 font-mono text-[10px] break-all">Memo {booking.memoId}</p>
                     <p className="mt-1 font-mono text-[10px] break-all">Tx {confirmedTxHash}</p>
