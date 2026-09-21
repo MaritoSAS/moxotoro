@@ -184,9 +184,9 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
                     isSelected
                       ? "bg-[#c4a962] text-[#0a0a0a] shadow-md"
                       : disabled
-                        ? "cursor-not-allowed bg-[#0a0a0a]/40 text-[#5b6270] line-through decoration-[#5b6270]/80"
+                        ? "cursor-not-allowed bg-transparent text-[#4b5563] opacity-40"
                         : "bg-[#0d3d47]/50 text-[#f5f0e8] hover:bg-[#165260] hover:text-[#dfc888]"
-                  } ${isToday && !isSelected ? "ring-1 ring-[#c4a962]/50" : ""}`}
+                  } ${isToday && !isSelected && !disabled ? "ring-1 ring-[#c4a962]/50" : ""}`}
                 >
                   {day}
                 </button>
@@ -196,9 +196,22 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
         </div>
       </div>
 
+      <div className="flex flex-wrap items-center gap-3 text-[10px] uppercase tracking-wide text-[#9ca3af]">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-3 w-3 rounded bg-[#0d3d47]/80" /> Disponible
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-3 w-3 rounded bg-[#c4a962]" /> Seleccionado
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-3 w-3 rounded bg-transparent text-[#4b5563] opacity-40 border border-white/10" /> No
+          disponible
+        </span>
+      </div>
+
       <p className="text-[11px] leading-relaxed text-[#9ca3af]">
         Las reservas cierran a las {MOXOTORO_CONFIG.capacity.cutoffHourPreviousDay}:00 hs del día anterior
-        (hora Argentina). Los días tachados no están disponibles.
+        (hora Argentina). Los días no disponibles no se pueden elegir.
       </p>
     </div>
   );

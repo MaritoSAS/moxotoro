@@ -158,9 +158,9 @@ export const HomeLanding: React.FC = () => {
             </p>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-[#f5f0e8]">Reservá tu salida</h2>
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[#9ca3af]">
-              Elegí el día en el calendario visible, el turno mañana o tarde, y pagá la seña en Stellar
-              USDC. No uses el selector nativo del navegador: el mes está acá, en español, con los días
-              no disponibles tachados.
+              Elegí el día en el calendario, el turno mañana o tarde, y pagá la seña en Stellar USDC.
+              Los días no disponibles quedan atenuados: el cupo cierra a las{" "}
+              {MOXOTORO_CONFIG.capacity.cutoffHourPreviousDay}:00 del día anterior (hora Argentina).
             </p>
           </div>
           <ReservationForm includeWalpac={includeWalpac} onIncludeWalpacChange={setIncludeWalpac} />
