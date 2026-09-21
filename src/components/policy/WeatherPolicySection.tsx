@@ -13,60 +13,59 @@ export const WeatherPolicySection: React.FC = () => {
     "Reserva creada con seña del 50% acreditada vía Stellar (Estado: 🟡 Con seña).",
   ]);
 
+  const appendLog = (...messages: string[]) => {
+    const stamp = new Date().toLocaleTimeString("es-AR");
+    setIncidentLog((prev) => [...prev, ...messages.map((message) => `[${stamp}] ${message}`)]);
+  };
+
   const triggerWeatherAlert = () => {
     setSimulatedStatus("weather_suspended");
     setIncidentStep(1);
-    setIncidentLog((prev) => [
-      ...prev,
+    appendLog(
       "🌧️ ALERTA METEOROLÓGICA: Lluvias torrenciales en el Valle de Siancas. Actividad suspendida por seguridad.",
       "Iniciando Protocolo de 3 Instancias (NO se cancela automáticamente).",
-    ]);
+    );
   };
 
   const offerReschedule = () => {
     setSimulatedStatus("reschedule_offered");
     setIncidentStep(2);
-    setIncidentLog((prev) => [
-      ...prev,
+    appendLog(
       "🔄 PASO 1 (Prioridad): Se ofreció al cliente reprogramar turno para el próximo sábado conservando el 100% de la seña.",
-    ]);
+    );
   };
 
   const acceptReschedule = () => {
     setSimulatedStatus("rescheduled");
     setIncidentStep(0);
-    setIncidentLog((prev) => [
-      ...prev,
+    appendLog(
       "🟢 RESOLUCIÓN PASO 1: Cliente aceptó nueva fecha. Seña transferida con éxito. Estado: 🟢 Reprogramada.",
-    ]);
+    );
   };
 
   const offerAlternative = () => {
     setSimulatedStatus("alternative_offered");
     setIncidentStep(3);
-    setIncidentLog((prev) => [
-      ...prev,
+    appendLog(
       "🟣 PASO 2: El cliente no puede en la nueva fecha. Se ofrece actividad alternativa en espacio cubierto (Masterclass y taller en Casa de los Pájaros con Walpac).",
-    ]);
+    );
   };
 
   const acceptAlternative = () => {
     setSimulatedStatus("rescheduled");
     setIncidentStep(0);
-    setIncidentLog((prev) => [
-      ...prev,
+    appendLog(
       "🟢 RESOLUCIÓN PASO 2: Cliente aceptó experiencia alternativa. Seña aplicada. Estado: 🟢 Reprogramada.",
-    ]);
+    );
   };
 
   const issueExceptionalRefund = () => {
     setSimulatedStatus("exceptional_refund");
     setIncidentStep(0);
-    setIncidentLog((prev) => [
-      ...prev,
+    appendLog(
       "🔴 PASO 3 (Último recurso): Tras agotar instancias 1 y 2 sin coincidencia justificada, se autorizó devolución excepcional de la seña.",
       "Registro inmutable emitido on-chain con hash de retorno en Stellar.",
-    ]);
+    );
   };
 
   const resetSimulator = () => {
@@ -221,7 +220,6 @@ export const WeatherPolicySection: React.FC = () => {
         <div className="rounded-lg bg-[#0a0a0a] border border-white/10 p-3 text-xs font-mono space-y-1.5 text-[#9ca3af] max-h-36 overflow-y-auto">
           {incidentLog.map((log, i) => (
             <div key={i} className="flex items-start gap-2">
-              <span className="text-[#c4a962]">[{new Date().toLocaleTimeString("es-AR")}]</span>
               <span className="text-[#e8e2d6]">{log}</span>
             </div>
           ))}
