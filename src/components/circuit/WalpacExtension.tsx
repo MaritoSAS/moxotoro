@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Palette, HeartHandshake, Eye, MapPin, Check } from "lucide-react";
+import { Sparkles, Palette, HeartHandshake, Eye, Check } from "lucide-react";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
 
 interface WalpacExtensionProps {
@@ -35,7 +35,7 @@ export const WalpacExtension: React.FC<WalpacExtensionProps> = ({
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-[#f5f0e8] bg-[#0a0a0a]/75 backdrop-blur-md px-3 py-2 rounded-lg border border-[#c4a962]/20">
               <span className="flex items-center gap-1.5 font-medium">
                 <Palette className="h-3.5 w-3.5 text-[#c4a962]" />
-                <span>Mural "Quiero Chicha, Busco Chicha"</span>
+                <span>Mural «Quiero Chicha, Busco Chicha»</span>
               </span>
               <span className="text-[10px] text-[#c4a962]">Arte & Coplas</span>
             </div>

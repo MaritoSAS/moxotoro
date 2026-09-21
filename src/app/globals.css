@@ -12,6 +12,7 @@
   --color-moxo-navy: #0d1b2a;
   --color-moxo-black: #0a0a0a;
   --font-outfit: 'Outfit', system-ui, -apple-system, sans-serif;
+  --animate-spin-slow: spin 12s linear infinite;
 }
 
 :root {
