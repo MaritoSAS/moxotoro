@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import maplibregl from "maplibre-gl";
+import { Map as MapLibreMap, Marker, NavigationControl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import geojsonData from "@/data/camino_real.geojson";
+import geojsonData from "@/data/camino_real.json";
 import { CircuitStop } from "@/types/moxotoro";
 import { MapPin, Navigation, Maximize2, Compass, Layers, CheckCircle2 } from "lucide-react";
 
@@ -14,8 +14,8 @@ interface MapViewerProps {
 
 export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectStop }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<maplibregl.Map | null>(null);
-  const markersRef = useRef<{ [id: string]: maplibregl.Marker }>({});
+  const mapRef = useRef<MapLibreMap | null>(null);
+  const markersRef = useRef<{ [id: string]: Marker }>({});
   const [activeStop, setActiveStop] = useState<CircuitStop | null>(null);
 
   // Extract stops from GeoJSON
@@ -41,7 +41,7 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
     const initialCenter: [number, number] = [-65.381, -24.599];
 
     // OpenStreetMap & Carto Positron basemap (Cero costo, cero API key)
-    const map = new maplibregl.Map({
+    const map = new MapLibreMap({
       container: mapContainerRef.current,
       style: {
         version: 8,
@@ -72,7 +72,7 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
       pitch: 35, // 3D perspective to emphasize the valley and terrain
     });
 
-    map.addControl(new maplibregl.NavigationControl({ showCompass: true, showZoom: true }), "top-right");
+    map.addControl(new NavigationControl({ showCompass: true, showZoom: true }), "top-right");
 
     map.on("load", () => {
       // 1. Add trail LineString
@@ -152,7 +152,7 @@ export const MapViewer: React.FC<MapViewerProps> = ({ selectedStopId, onSelectSt
           });
         });
 
-        const marker = new maplibregl.Marker({ element: el })
+        const marker = new Marker({ element: el })
           .setLngLat(stop.coordinates)
           .addTo(map);
 
