@@ -25,6 +25,12 @@ export const MOXOTORO_CONFIG = {
     legalEntity: "Grupo Marito S.A.S.",
   },
 
+  founder: {
+    name: "Mariana Mamaní",
+    greetingName: "Mariana",
+    role: "Turismo patrimonial",
+  },
+
   pricing: {
     // Tarifas de referencia aprobadas
     options: [
@@ -119,5 +125,8 @@ export const MOXOTORO_CONFIG = {
     whatsAppDirectUrl: "https://wa.me/5493874624947",
     instagramHandle: "@magnamiexperience",
     instagramUrl: "https://www.instagram.com/magnamiexperience",
+    xHandle: "@Andinativas",
+    xUrl: "https://x.com/Andinativas",
+    linkedInUrl: "https://www.linkedin.com/in/marianamamani",
   },
 };
