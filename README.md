@@ -46,6 +46,26 @@ npm run dev
 
 Abrí http://localhost:3000
 
+## Tarjeta NFC
+
+`/tarjeta` es la tarjeta digital de Mariana Mamaní (turismo patrimonial, Magnami Experience / MOXOTORO). Las tarjetas NFC de hoteles y otros aliados tienen que abrir esa URL cuando el visitante las toca.
+
+Grabá en el chip NTAG:
+
+```
+https://moxotoro.vercel.app/tarjeta
+```
+
+Para saber de qué recepción llegó la consulta, sumá `ref` con el nombre del aliado. No hace falta backend: el nombre se muestra en la tarjeta y viaja en el mensaje de WhatsApp.
+
+```
+https://moxotoro.vercel.app/tarjeta?ref=aliado
+```
+
+Ejemplo: `https://moxotoro.vercel.app/tarjeta?ref=Hotel%20La%20Caldera`
+
+`/nfc` redirige a `/tarjeta` y conserva la query. El número de WhatsApp y las redes salen de `src/config/moxotoro.config.ts`.
+
 Build de verificación:
 
 ```bash
