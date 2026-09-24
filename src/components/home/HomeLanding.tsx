@@ -32,6 +32,7 @@ import {
   getMinBookingDate,
   isDateBookable,
 } from "@/lib/booking";
+import { stellarExpertTxUrl } from "@/lib/stellar";
 import type { Booking, CircuitStop } from "@/types/moxotoro";
 
 const CIRCUIT_STOPS = getCircuitStops();
@@ -159,7 +160,6 @@ export const HomeLanding: React.FC = () => {
         : current
     );
     setConfirmedTxHash(txHash);
-    setCheckoutOpen(false);
   };
 
   const whatsAppUrl = buildWhatsAppReservationUrl({
@@ -547,6 +547,14 @@ export const HomeLanding: React.FC = () => {
                     </p>
                     <p className="mt-1 font-mono text-[10px] break-all">Memo {booking.memoId}</p>
                     <p className="mt-1 font-mono text-[10px] break-all">Tx {confirmedTxHash}</p>
+                    <a
+                      href={stellarExpertTxUrl(confirmedTxHash)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-block font-medium text-emerald-300 underline"
+                    >
+                      Ver en stellar.expert
+                    </a>
                   </div>
                 )}
 
@@ -573,8 +581,8 @@ export const HomeLanding: React.FC = () => {
                   Coordinar por WhatsApp
                 </a>
                 <p className="text-[10px] leading-relaxed text-[#9ca3af]">
-                  Asset {MOXOTORO_CONFIG.stellar.assetCode} · Horizon testnet. La cuenta receptora
-                  pública está en la configuración de producto; no uses mainnet.
+                  USDC Testnet (emisor Circle) · verificación en Horizon. Solo clave pública
+                  receptora; no uses mainnet.
                 </p>
               </aside>
             </form>
