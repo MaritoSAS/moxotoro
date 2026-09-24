@@ -6,6 +6,7 @@ import { Booking } from "@/types/moxotoro";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
 import { formatDateLongEs, getMinBookingDate, isDateBookable } from "@/lib/booking";
 import { StellarCheckoutModal } from "@/components/payment/StellarCheckoutModal";
+import { stellarExpertTxUrl } from "@/lib/stellar";
 import { BookingCalendar } from "@/components/booking/BookingCalendar";
 
 interface ReservationFormProps {
@@ -318,6 +319,14 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
             <span className="font-mono">{checkoutBooking.memoId}</span>
           </p>
           <p className="text-[11px] font-mono break-all text-emerald-200/70">Tx {paidTxHash}</p>
+          <a
+            href={stellarExpertTxUrl(paidTxHash)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block text-[11px] font-medium text-emerald-300 underline"
+          >
+            Ver en stellar.expert
+          </a>
         </div>
       )}
 
@@ -333,7 +342,6 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                 : prev,
             );
             setPaidTxHash(txHash);
-            setIsCheckoutOpen(false);
           }}
         />
       )}

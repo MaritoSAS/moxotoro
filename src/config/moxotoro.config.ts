@@ -109,8 +109,10 @@ export const MOXOTORO_CONFIG = {
     network: "TESTNET", // 'TESTNET' | 'PUBLIC'
     horizonUrl: "https://horizon-testnet.stellar.org",
     assetCode: "USDC",
-    // Cuenta pública de Moxotoro para recepción en Testnet
-    receiverPublicKey: "GC4PXOQZQL4K6I35T75S74W5M5VUXMQUJFX34H2PFLX7K7D2P4J3BMOX",
+    // Circle USDC on Stellar Testnet. Public key only — never a secret.
+    assetIssuer: "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5",
+    // Cuenta pública de Moxotoro para recepción en Testnet (sin secretos en el repo)
+    receiverPublicKey: "GBGBBRRSTCYSP4FXFQCUIFF42XUGAUJOQYLL2DKAET7KYAAO6J56HS4Y",
     memoPrefix: "MOXO-",
   },
 
