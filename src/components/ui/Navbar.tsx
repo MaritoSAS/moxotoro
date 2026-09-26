@@ -3,12 +3,15 @@
 import React, { useState } from "react";
 import { Calendar, MessageCircle, Menu, X } from "lucide-react";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
+import { DemoPath } from "@/components/demo/DemoPath";
 
 interface NavbarProps {
   onOpenBooking: () => void;
+  demoStep: number;
+  onDemoStep: (step: number) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, demoStep, onDemoStep }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -39,8 +42,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#reservar" className="text-[#c4a962] hover:text-[#dfc888] transition-colors font-medium">
-            Reservas
+          <a href="#experiencia" className="text-[#c4a962] hover:text-[#dfc888] transition-colors font-medium">
+            Experiencia
+          </a>
+          <a href="#reservar" className="text-[#e8e2d6] hover:text-[#c4a962] transition-colors font-medium">
+            Reserva
           </a>
           <a href="#circuito" className="text-[#e8e2d6] hover:text-[#c4a962] transition-colors">
             Circuito Camino Real
@@ -96,11 +102,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-[#c4a962]/20 bg-[#0d1b2a] px-4 py-4 space-y-3">
           <a
-            href="#reservar"
+            href="#experiencia"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-sm text-[#c4a962] font-medium"
           >
-            Reservas
+            Experiencia
+          </a>
+          <a
+            href="#reservar"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-sm text-[#e8e2d6] hover:text-[#c4a962]"
+          >
+            Reserva
           </a>
           <a
             href="#circuito"
@@ -158,6 +171,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
           </div>
         </div>
       )}
+
+      <div className="border-t border-[#c4a962]/15 bg-[#0d1b2a]/90 px-4 py-2 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <DemoPath activeStep={demoStep} onSelect={onDemoStep} />
+        </div>
+      </div>
     </header>
   );
 };
