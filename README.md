@@ -93,6 +93,10 @@ En el modal:
 4. Si Horizon encuentra el pago, el estado pasa a **Confirmado** y muestra el enlace a stellar.expert. Si aún no está, queda **Pendiente**. Si el monto, el activo o Horizon no cierran, queda **Fallido**.
 5. Refrescá la página en la misma pestaña: el memo y, si ya se verificó, el hash siguen asociados. Una reserva nueva reemplaza lo guardado.
 
+## Cómo grabar la demo
+
+El click path (experiencia, reserva, seña, Stellar, verificación en Horizon y confirmación) está en [DEMO.md](./DEMO.md). La verificación de la seña sigue siendo la consulta real a Horizon Testnet.
+
 ## Equipo
 
 Mariana Mamaní — track Genesis / Argentina Builder Challenge.

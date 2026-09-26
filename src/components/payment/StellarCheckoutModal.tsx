@@ -5,6 +5,8 @@ import QRCode from "qrcode";
 import { Copy, Check, Loader2, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import { Booking } from "@/types/moxotoro";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
+import { formatDateLongEs } from "@/lib/booking";
+import { DemoPath, demoStepFromCheckout } from "@/components/demo/DemoPath";
 import {
   generateSep0007Uri,
   stellarExpertTxUrl,
@@ -73,6 +75,8 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
   }
 
   const allowPaymentSimulation = process.env.NEXT_PUBLIC_ALLOW_PAYMENT_SIMULATION === "true";
+  const modalStep = demoStepFromCheckout(phase, isVerifying, verificationMessage !== null);
+  const depositPercent = MOXOTORO_CONFIG.pricing.depositPercentage;
   const confirmedTxHash =
     phase === "confirmed" ? (verifiedTxHash ?? booking.stellarTxHash ?? null) : null;
 
@@ -149,8 +153,10 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-black/80 p-4 py-6 backdrop-blur-md sm:py-8">
       <div className="relative w-full max-w-lg rounded-2xl border border-[#c4a962]/40 bg-[#0d1b2a] p-6 shadow-2xl space-y-5">
+        <DemoPath activeStep={modalStep} />
+
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/10">
           <div className="flex items-center gap-2">
@@ -159,7 +165,9 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="font-bold text-base text-[#f5f0e8]">Pago de Seña en Stellar USDC</h3>
+                <h3 className="font-bold text-base text-[#f5f0e8]">
+                  {modalStep === 6 ? "6 · Confirmación" : modalStep === 5 ? "5 · Verificación" : "4 · Stellar"}
+                </h3>
                 <span className="inline-flex items-center rounded-full border border-emerald-400/50 bg-emerald-400/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
                   {MOXOTORO_CONFIG.stellar.network}
                 </span>
@@ -173,30 +181,115 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
             type="button"
             onClick={onClose}
             className="rounded-lg p-1.5 text-[#9ca3af] hover:text-[#f5f0e8] hover:bg-white/5"
+            aria-label="Cerrar checkout"
           >
             ✕
           </button>
         </div>
 
-        {/* Deposit Summary Box */}
-        <div className="rounded-xl border border-[#c4a962]/30 bg-[#0a0a0a]/70 p-4 flex items-center justify-between">
-          <div>
-            <span className="text-[11px] text-[#9ca3af] uppercase tracking-wider block">
-              Seña a abonar hoy (50%)
+        <div className="rounded-xl border border-white/10 bg-[#0a0a0a]/50 px-3 py-2 text-xs text-[#e8e2d6]">
+          <p className="font-semibold text-[#f5f0e8]">{booking.pricingOptionTitle}</p>
+          <p className="mt-0.5 text-[#9ca3af]">
+            {formatDateLongEs(booking.date)} · {booking.timeSlotLabel} · {booking.participantsCount} participantes
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-white/15 bg-[#0a0a0a]/70 p-3">
+            <span className="text-[11px] uppercase tracking-wider text-[#9ca3af] block">
+              Total de la experiencia
+            </span>
+            <span className="text-2xl font-bold text-[#f5f0e8]">
+              {booking.totalPriceUsdc.toFixed(2)} USDC
+            </span>
+            <span className="mt-0.5 block text-[11px] text-[#9ca3af]">
+              ${booking.totalPriceArs.toLocaleString("es-AR")} ARS
+            </span>
+          </div>
+          <div className="rounded-xl border-2 border-[#c4a962] bg-[#0d3d47]/60 p-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#c4a962] block">
+              Seña requerida ({depositPercent}%)
             </span>
             <span className="text-2xl font-bold text-[#c4a962]">
               {booking.depositRequiredUsdc.toFixed(2)} USDC
             </span>
-            <span className="text-xs text-[#9ca3af] ml-2">
-              (~${booking.depositRequiredArs.toLocaleString("es-AR")} ARS)
+            <span className="mt-0.5 block text-[11px] text-[#e8e2d6]">
+              ${booking.depositRequiredArs.toLocaleString("es-AR")} ARS · saldo {booking.balanceDueUsdc.toFixed(2)} USDC
             </span>
           </div>
-          <div className="text-right">
-            <span className="text-[10px] text-[#9ca3af] block">Saldo al iniciar:</span>
-            <span className="text-xs font-semibold text-[#f5f0e8]">
-              {booking.balanceDueUsdc.toFixed(2)} USDC
-            </span>
-          </div>
+        </div>
+
+        <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/30 px-3 py-2">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-300">Medio de pago</p>
+          <p className="text-sm font-bold text-[#f5f0e8]">
+            USDC · Stellar {MOXOTORO_CONFIG.stellar.network}
+          </p>
+        </div>
+
+        <div
+          role="status"
+          aria-live="polite"
+          className={`rounded-xl border p-4 text-sm space-y-1 ${PAYMENT_STATE_CLASS[phase]}`}
+        >
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] opacity-80">
+            Estado de la reserva
+          </p>
+          <p className="text-xl font-bold">{PAYMENT_STATE_LABEL[phase]}</p>
+          {phase === "confirmed" && confirmedTxHash && (
+            <>
+              <p>Seña verificada en Horizon (Testnet). Cupo reservado.</p>
+              <p className="font-mono text-[10px] break-all">Memo {booking.memoId}</p>
+              <p className="font-mono text-[10px] break-all">Tx {confirmedTxHash}</p>
+              <a
+                href={stellarExpertTxUrl(confirmedTxHash)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block font-medium text-emerald-300 underline break-all"
+              >
+                Ver en stellar.expert
+              </a>
+            </>
+          )}
+          {phase === "pending" && (
+            <p>
+              {verificationMessage ?? "Esperando la acreditación en Horizon."}
+            </p>
+          )}
+          {phase === "failed" && (
+            <p>{horizonFailureCopy(verificationMessage)}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <button
+            type="button"
+            onClick={handleVerifyOnChain}
+            disabled={isVerifying}
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#0d3d47] to-[#165260] hover:from-[#165260] hover:to-[#0d3d47] border border-[#c4a962]/40 py-2.5 text-xs font-semibold text-[#f5f0e8] transition-all shadow-md"
+          >
+            {isVerifying ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin text-[#c4a962]" />
+                <span>Consultando Stellar Horizon Ledger...</span>
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="h-4 w-4 text-[#c4a962]" />
+                <span>Verificar Acreditación de Seña en Stellar</span>
+              </>
+            )}
+          </button>
+
+          {allowPaymentSimulation && (
+            <button
+              type="button"
+              onClick={handleSimulatePayment}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#c4a962] hover:bg-[#dfc888] py-2.5 text-xs font-bold uppercase tracking-wider text-[#0a0a0a] transition-all shadow-lg active:scale-98"
+            >
+              <Zap className="h-4 w-4" />
+              <span>Simular Confirmación Inmediata (Demo Challenge)</span>
+            </button>
+          )}
         </div>
 
         <p className="text-[11px] leading-relaxed text-[#9ca3af]">
@@ -209,10 +302,10 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
             <img
               src={qrDataUrl}
               alt="Código QR de Pago Stellar"
-              className="h-48 w-48 rounded-lg border-2 border-[#c4a962]/40 p-1 bg-[#f5f0e8]"
+              className="h-40 w-40 rounded-lg border-2 border-[#c4a962]/40 p-1 bg-[#f5f0e8]"
             />
           ) : (
-            <div className="h-48 w-48 flex items-center justify-center">
+            <div className="flex h-40 w-40 items-center justify-center">
               <Loader2 className="h-8 w-8 animate-spin text-[#c4a962]" />
             </div>
           )}
@@ -261,67 +354,6 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
           </div>
         </div>
 
-        <div
-          role="status"
-          aria-live="polite"
-          className={`rounded-lg border p-2.5 text-xs space-y-1 ${PAYMENT_STATE_CLASS[phase]}`}
-        >
-          <p className="font-semibold">{PAYMENT_STATE_LABEL[phase]}</p>
-          {phase === "confirmed" && confirmedTxHash && (
-            <>
-              <p>Seña verificada en Horizon (Testnet).</p>
-              <a
-                href={stellarExpertTxUrl(confirmedTxHash)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block font-medium text-emerald-300 underline break-all"
-              >
-                Ver en stellar.expert
-              </a>
-            </>
-          )}
-          {phase === "pending" && (
-            <p>
-              {verificationMessage ?? "Esperando la acreditación en Horizon."}
-            </p>
-          )}
-          {phase === "failed" && (
-            <p>{horizonFailureCopy(verificationMessage)}</p>
-          )}
-        </div>
-
-        {/* Action Controls */}
-        <div className="space-y-2 pt-2 border-t border-white/10">
-          <button
-            type="button"
-            onClick={handleVerifyOnChain}
-            disabled={isVerifying}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#0d3d47] to-[#165260] hover:from-[#165260] hover:to-[#0d3d47] border border-[#c4a962]/40 py-2.5 text-xs font-semibold text-[#f5f0e8] transition-all shadow-md"
-          >
-            {isVerifying ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin text-[#c4a962]" />
-                <span>Consultando Stellar Horizon Ledger...</span>
-              </>
-            ) : (
-              <>
-                <ShieldCheck className="h-4 w-4 text-[#c4a962]" />
-                <span>Verificar Acreditación de Seña en Stellar</span>
-              </>
-            )}
-          </button>
-
-          {allowPaymentSimulation && (
-            <button
-              type="button"
-              onClick={handleSimulatePayment}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#c4a962] hover:bg-[#dfc888] py-2.5 text-xs font-bold uppercase tracking-wider text-[#0a0a0a] transition-all shadow-lg active:scale-98"
-            >
-              <Zap className="h-4 w-4" />
-              <span>Simular Confirmación Inmediata (Demo Challenge)</span>
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
