@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { CalendarDays, Clock, Sun, Sunset, Users, Wallet } from "lucide-react";
 import { Booking } from "@/types/moxotoro";
+import { clearActiveBooking, readActiveBooking, writeActiveBooking } from "@/lib/activeBooking";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
 import { formatDateLongEs, getMinBookingDate, isDateBookable } from "@/lib/booking";
 import { StellarCheckoutModal } from "@/components/payment/StellarCheckoutModal";
@@ -38,6 +39,37 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   const [checkoutBooking, setCheckoutBooking] = useState<Booking | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [paidTxHash, setPaidTxHash] = useState<string | null>(null);
+  const checkoutBookingRef = useRef(checkoutBooking);
+  checkoutBookingRef.current = checkoutBooking;
+  const onIncludeWalpacChangeRef = useRef(onIncludeWalpacChange);
+  onIncludeWalpacChangeRef.current = onIncludeWalpacChange;
+
+  useEffect(() => {
+    if (checkoutBookingRef.current) return;
+    const saved = readActiveBooking();
+    if (!saved) return;
+
+    const hash = saved.paidTxHash ?? saved.booking.stellarTxHash ?? null;
+    setCheckoutBooking(saved.booking);
+    setPaidTxHash(hash);
+    setCustomerName(saved.booking.customerName);
+    setCustomerEmail(saved.booking.customerEmail);
+    setCustomerPhone(saved.booking.customerPhone);
+    setDate(saved.booking.date);
+    setTimeSlotId(saved.booking.timeSlotId);
+    setPricingOptionId(saved.booking.pricingOptionId);
+    setParticipantsCount(saved.booking.participantsCount);
+    onIncludeWalpacChangeRef.current(saved.booking.includeWalpacAddon);
+    if (!hash) setIsCheckoutOpen(true);
+  }, []);
+
+  useEffect(() => {
+    if (!checkoutBooking) return;
+    writeActiveBooking({
+      booking: checkoutBooking,
+      paidTxHash: paidTxHash ?? checkoutBooking.stellarTxHash ?? null,
+    });
+  }, [checkoutBooking, paidTxHash]);
 
   const selectedSlot =
     MOXOTORO_CONFIG.capacity.timeSlots.find((slot) => slot.id === timeSlotId) ?? defaultSlot;
@@ -115,6 +147,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       createdAt: nowIso,
     };
 
+    clearActiveBooking();
     setPaidTxHash(null);
     setCheckoutBooking(booking);
     setIsCheckoutOpen(true);

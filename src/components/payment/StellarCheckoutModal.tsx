@@ -5,13 +5,39 @@ import QRCode from "qrcode";
 import { Copy, Check, Loader2, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import { Booking } from "@/types/moxotoro";
 import { MOXOTORO_CONFIG } from "@/config/moxotoro.config";
-import { generateSep0007Uri, stellarExpertTxUrl, verifyTransactionByMemo } from "@/lib/stellar";
+import {
+  generateSep0007Uri,
+  stellarExpertTxUrl,
+  verifyTransactionByMemo,
+  type VerificationResult,
+} from "@/lib/stellar";
 
 interface StellarCheckoutModalProps {
   booking: Booking;
   isOpen: boolean;
   onClose: () => void;
   onPaymentSuccess: (txHash: string) => void;
+}
+
+type PaymentVisualState = "pending" | "confirmed" | "failed";
+
+const PAYMENT_STATE_LABEL: Record<PaymentVisualState, string> = {
+  pending: "Pendiente",
+  confirmed: "Confirmado",
+  failed: "Fallido",
+};
+
+const PAYMENT_STATE_CLASS: Record<PaymentVisualState, string> = {
+  pending: "bg-amber-950/40 border-amber-500/30 text-amber-200",
+  confirmed: "bg-emerald-950/40 border-emerald-500/30 text-emerald-100",
+  failed: "bg-rose-950/40 border-rose-500/40 text-rose-100",
+};
+
+function phaseFromResult(result: VerificationResult): PaymentVisualState {
+  if (result.verified && result.txHash) return "confirmed";
+  if (result.outcome === "pending") return "pending";
+  if (result.outcome === "failed") return "failed";
+  return result.message.startsWith("No se detectó aún") ? "pending" : "failed";
 }
 
 export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
@@ -25,17 +51,22 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
   const [copiedMemo, setCopiedMemo] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState<string | null>(null);
-  const [verifiedTxHash, setVerifiedTxHash] = useState<string | null>(null);
+  const [verifiedTxHash, setVerifiedTxHash] = useState<string | null>(booking.stellarTxHash ?? null);
+  const [phase, setPhase] = useState<PaymentVisualState>(
+    booking.stellarTxHash ? "confirmed" : "pending",
+  );
   const [trackedMemoId, setTrackedMemoId] = useState(booking.memoId);
 
   if (trackedMemoId !== booking.memoId) {
     setTrackedMemoId(booking.memoId);
-    setVerifiedTxHash(null);
+    setVerifiedTxHash(booking.stellarTxHash ?? null);
+    setPhase(booking.stellarTxHash ? "confirmed" : "pending");
     setVerificationMessage(null);
   }
 
   const allowPaymentSimulation = process.env.NEXT_PUBLIC_ALLOW_PAYMENT_SIMULATION === "true";
-  const proofTxHash = verifiedTxHash ?? booking.stellarTxHash ?? null;
+  const confirmedTxHash =
+    phase === "confirmed" ? (verifiedTxHash ?? booking.stellarTxHash ?? null) : null;
 
   const sepUri = generateSep0007Uri({
     amountUsdc: booking.depositRequiredUsdc,
@@ -76,18 +107,36 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
     const result = await verifyTransactionByMemo(booking.memoId, booking.depositRequiredUsdc);
     setIsVerifying(false);
 
-    if (result.verified && result.txHash) {
+    const nextPhase = phaseFromResult(result);
+    if (nextPhase === "confirmed" && result.txHash) {
+      setPhase("confirmed");
       setVerifiedTxHash(result.txHash);
       setVerificationMessage(null);
       onPaymentSuccess(result.txHash);
-    } else {
-      setVerificationMessage(result.message);
+      return;
     }
+
+    if (nextPhase === "pending") {
+      if (phase === "confirmed" || booking.stellarTxHash || verifiedTxHash) {
+        setPhase("confirmed");
+        return;
+      }
+      setPhase("pending");
+      setVerificationMessage(result.message);
+      return;
+    }
+
+    setPhase("failed");
+    setVerifiedTxHash(null);
+    setVerificationMessage(result.message);
   };
 
   const handleSimulatePayment = () => {
     // Generates a mock realistic Stellar Tx Hash for demo purposes
     const mockHash = "7f8b9a2c" + Array.from({ length: 56 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
+    setPhase("confirmed");
+    setVerifiedTxHash(mockHash);
+    setVerificationMessage(null);
     onPaymentSuccess(mockHash);
   };
 
@@ -204,26 +253,34 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
           </div>
         </div>
 
-        {/* Verification status / notice */}
-        {proofTxHash && (
-          <div className="rounded-lg bg-emerald-950/40 border border-emerald-500/30 p-2.5 text-xs text-emerald-100 space-y-1">
-            <p className="font-semibold">Seña verificada en Horizon (Testnet).</p>
-            <a
-              href={stellarExpertTxUrl(proofTxHash)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block font-medium text-emerald-300 underline break-all"
-            >
-              Ver en stellar.expert
-            </a>
-          </div>
-        )}
-
-        {verificationMessage && (
-          <div className="rounded-lg bg-amber-950/40 border border-amber-500/30 p-2.5 text-xs text-amber-200">
-            {verificationMessage}
-          </div>
-        )}
+        <div
+          role="status"
+          aria-live="polite"
+          className={`rounded-lg border p-2.5 text-xs space-y-1 ${PAYMENT_STATE_CLASS[phase]}`}
+        >
+          <p className="font-semibold">{PAYMENT_STATE_LABEL[phase]}</p>
+          {phase === "confirmed" && confirmedTxHash && (
+            <>
+              <p>Seña verificada en Horizon (Testnet).</p>
+              <a
+                href={stellarExpertTxUrl(confirmedTxHash)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block font-medium text-emerald-300 underline break-all"
+              >
+                Ver en stellar.expert
+              </a>
+            </>
+          )}
+          {phase === "pending" && (
+            <p>
+              {verificationMessage ?? "Esperando la acreditación en Horizon."}
+            </p>
+          )}
+          {phase === "failed" && (
+            <p>{verificationMessage ?? "No se pudo confirmar la seña."}</p>
+          )}
+        </div>
 
         {/* Action Controls */}
         <div className="space-y-2 pt-2 border-t border-white/10">

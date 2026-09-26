@@ -1,20 +1,23 @@
 ﻿# MOXOTORO
 
-Experiencia turística patrimonial en La Caldera (Salta, Argentina) — *Magnami Experience*.
-Proyecto para el **Argentina Builder Challenge (BAF × Stellar)**.
+Experiencia turística patrimonial en La Caldera (Salta, Argentina). **Magnami Experience** queda como marca histórica y de operación. Proyecto del **Argentina Builder Challenge (BAF × Stellar)**, Checkpoint 3.
 
 ## Problema
 
 Reservar y cobrar una experiencia guiada (circuito Camino Real / Qhapaq Ñan) con seña clara, cupos y protocolo climático, sin fricción de cobro internacional/local.
 
-## Solución (esqueleto Checkpoint 2)
+## Solución
 
-App Next.js para:
-- Mostrar el circuito y paradas (mapa + GeoJSON)
+App Next.js publicada en [https://moxotoro.vercel.app](https://moxotoro.vercel.app):
+
+- Circuito y paradas (mapa + GeoJSON)
 - Tarifas en USDC / ARS, seña configurable y extensión Walpac
-- Checkout de seña con **Stellar Testnet** (SEP-0007 USDC + verificación por memo en Horizon)
+- Checkout de seña en **Stellar Testnet** (SEP-0007 USDC). Horizon verifica memo, destino, activo y monto
+- Estados de pago en el checkout: **Pendiente**, **Confirmado** y **Fallido**
 - Políticas de seña y clima documentadas en producto
-- Reserva en home con **calendario mensual visible** (español Argentina) y turnos mañana/tarde
+- Reserva en la home con calendario mensual (español Argentina) y turnos mañana/tarde
+
+La reserva activa (memo, estado y hash de la seña si ya se verificó) se guarda en `sessionStorage` bajo `moxotoro.activeBooking`. Un refresh en la misma pestaña no pierde esa asociación. No usa `localStorage` ni backend. Se borra al generar una reserva nueva; cerrar el modal no la borra, para que el memo y el hash sigan visibles después de refrescar.
 
 ## Stack
 
@@ -22,16 +25,16 @@ App Next.js para:
 - `@stellar/stellar-sdk` (Horizon testnet, USDC)
 - MapLibre GL
 
-## Estado actual (Checkpoint 2 · 21/09)
+## Estado actual (Checkpoint 3)
 
 | Área | Estado |
 |------|--------|
-| Config de negocio (precios, cupos, políticas) | Listo |
-| Seña Testnet verificable (SEP-0007 USDC + Horizon) | En `src/lib/stellar.ts` |
-| Componentes (mapa, checkout, circuito, clima) | En `src/components/` |
-| UI principal cableada | Home compone hero, circuito, mapa, tarifas, Walpac, seña USDC y protocolo climático |
-| Calendario de reserva | Visible en `#reservar` (no `input type="date"`) |
-| Deploy testnet público | Pendiente |
+| Deploy | [moxotoro.vercel.app](https://moxotoro.vercel.app) |
+| Config de negocio (precios, cupos, políticas) | `src/config/moxotoro.config.ts` |
+| Seña Testnet verificable (SEP-0007 USDC + Horizon) | `src/lib/stellar.ts` |
+| Estados Pendiente / Confirmado / Fallido | `src/components/payment/StellarCheckoutModal.tsx` |
+| Reserva activa en la pestaña | `sessionStorage` (`moxotoro.activeBooking`) |
+| Calendario, mapa, WhatsApp, Magnami | Home |
 
 ## Reserva
 
@@ -52,16 +55,18 @@ Build de verificación:
 npm run build
 ```
 
+### Variable opcional
+
+`NEXT_PUBLIC_ALLOW_PAYMENT_SIMULATION=true` muestra el botón de simulación en el checkout. Si la variable no está definida, o tiene otro valor, el botón no aparece. La verificación de una seña real sigue siendo Horizon Testnet.
+
 ## Qué muestra la home
 
-La ruta `/` deja de ser Hello World y arma el esqueleto de producto de punta a punta:
-
-1. **Hero de marca** — MOXOTORO, tagline, destino La Caldera y datos de seña / cupo / red.
+1. **Hero de marca** — MOXOTORO, tagline, destino La Caldera y datos de seña / cupo / red. Magnami Experience figura como marca histórica.
 2. **Circuito Camino Real** — las 5 paradas oficiales (`CircuitStops` + GeoJSON).
 3. **Mapa interactivo** — MapLibre con la traza `src/data/camino_real.geojson`.
 4. **Extensión Walpac** — Casa de los Pájaros como addon de reserva.
-5. **Tarifas y checkout** — opciones con/sin traslado, **calendario mensual visible** (`#reservar`, lunes–domingo en español) y `StellarCheckoutModal` para pagar la seña en USDC (SEP-0007, QR, memo, verificación Horizon).
-6. **Política de seña y clima** — protocolo de 3 instancias con simulador de estados.
+5. **Tarifas y checkout** — opciones con/sin traslado, calendario mensual visible (`#reservar`) y `StellarCheckoutModal` para la seña en USDC (SEP-0007, QR, memo, verificación Horizon).
+6. **Política de seña y clima** — protocolo de 3 instancias.
 
 Copy de la UI en español (Argentina). Pagos configurados **solo en TESTNET** (`src/config/moxotoro.config.ts`). No hay claves de mainnet ni secretos en el repo: solo la clave pública receptora.
 
@@ -74,14 +79,19 @@ La seña se cobra en **USDC de Stellar TESTNET**, emisor Circle (`asset_issuer` 
 - Config: `src/config/moxotoro.config.ts`
 - Comprobante: `https://stellar.expert/explorer/testnet/tx/{txHash}`
 
-El botón de simulación no se muestra salvo que `NEXT_PUBLIC_ALLOW_PAYMENT_SIMULATION=true`.
+En el modal:
+
+- **Pendiente** — todavía no aparece el pago en Horizon.
+- **Confirmado** — pago verificado, con enlace a stellar.expert.
+- **Fallido** — monto distinto, activo incorrecto, error de Horizon u otro resultado que no es éxito. No se muestra como confirmado.
 
 ### Cómo probar la seña
 
 1. En LOBSTR o Freighter, cambiá la red a **Testnet** y conseguí USDC del emisor Circle (no XLM).
 2. Reservá en la home y pagá la seña escaneando el QR o abriendo el URI. El memo `MOXO-…` es obligatorio.
 3. Pulsá **Verificar Acreditación de Seña en Stellar**.
-4. Si Horizon encuentra el pago, el checkout muestra el enlace a stellar.expert.
+4. Si Horizon encuentra el pago, el estado pasa a **Confirmado** y muestra el enlace a stellar.expert. Si aún no está, queda **Pendiente**. Si el monto, el activo o Horizon no cierran, queda **Fallido**.
+5. Refrescá la página en la misma pestaña: el memo y, si ya se verificó, el hash siguen asociados. Una reserva nueva reemplaza lo guardado.
 
 ## Equipo
 

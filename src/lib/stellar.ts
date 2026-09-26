@@ -47,8 +47,12 @@ export function stellarExpertTxUrl(txHash: string): string {
   return `https://stellar.expert/explorer/${network}/tx/${txHash}`;
 }
 
+export type VerificationOutcome = "verified" | "pending" | "failed";
+
 export interface VerificationResult {
   verified: boolean;
+  /** verified = pago OK; pending = todavía no está en Horizon; failed = monto, activo u error. */
+  outcome: VerificationOutcome;
   txHash?: string;
   amount?: string;
   sourceAccount?: string;
@@ -98,12 +102,24 @@ export async function verifyTransactionByMemo(
       .call();
 
     let sawAmountMismatch = false;
+    let sawWrongAsset = false;
 
     for (const record of payments.records) {
       if (!isCreditDelivery(record)) continue;
       if (!record.transaction_successful) continue;
       if (record.to !== receiverAccount) continue;
-      if (!isConfiguredUsdc(record)) continue;
+
+      if (!isConfiguredUsdc(record)) {
+        try {
+          const otherTx = await record.transaction();
+          if (otherTx.memo_type === "text" && otherTx.memo === memoId) {
+            sawWrongAsset = true;
+          }
+        } catch {
+          // Un lookup de otro activo no debe tapar un USDC válido más abajo.
+        }
+        continue;
+      }
 
       const tx = await record.transaction();
       if (tx.memo_type !== "text" || tx.memo !== memoId) continue;
@@ -118,6 +134,7 @@ export async function verifyTransactionByMemo(
 
       return {
         verified: true,
+        outcome: "verified",
         txHash: record.transaction_hash,
         amount: record.amount,
         sourceAccount: record.from,
@@ -129,12 +146,23 @@ export async function verifyTransactionByMemo(
     if (sawAmountMismatch && expectedAmountUsdc !== undefined) {
       return {
         verified: false,
+        outcome: "failed",
         message: `Hay un pago USDC con ese memo, pero el monto no coincide con la seña de ${expectedAmountUsdc.toFixed(2)} USDC.`,
+      };
+    }
+
+    if (sawWrongAsset) {
+      return {
+        verified: false,
+        outcome: "failed",
+        message:
+          "Hay un pago con ese memo, pero el activo no es el USDC del emisor configurado.",
       };
     }
 
     return {
       verified: false,
+      outcome: "pending",
       message: "No se detectó aún la transacción con el identificador de seña en el ledger.",
     };
   } catch (error) {
@@ -149,6 +177,7 @@ export async function verifyTransactionByMemo(
     if (status === 404) {
       return {
         verified: false,
+        outcome: "failed",
         message:
           "La cuenta receptora todavía no aparece en Horizon testnet. Fondeala con Friendbot y reintentá.",
       };
@@ -156,6 +185,7 @@ export async function verifyTransactionByMemo(
 
     return {
       verified: false,
+      outcome: "failed",
       message: error instanceof Error ? error.message : "Error al consultar Stellar Horizon",
     };
   }
