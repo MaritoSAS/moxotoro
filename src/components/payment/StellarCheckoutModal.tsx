@@ -33,6 +33,14 @@ const PAYMENT_STATE_CLASS: Record<PaymentVisualState, string> = {
   failed: "bg-rose-950/40 border-rose-500/40 text-rose-100",
 };
 
+function horizonFailureCopy(message: string | null): string {
+  if (!message) return "No se pudo confirmar la seña.";
+  if (message === "Failed to fetch" || message === "Load failed" || message.startsWith("NetworkError")) {
+    return "No se pudo consultar Stellar Horizon.";
+  }
+  return message;
+}
+
 function phaseFromResult(result: VerificationResult): PaymentVisualState {
   if (result.verified && result.txHash) return "confirmed";
   if (result.outcome === "pending") return "pending";
@@ -278,7 +286,7 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
             </p>
           )}
           {phase === "failed" && (
-            <p>{verificationMessage ?? "No se pudo confirmar la seña."}</p>
+            <p>{horizonFailureCopy(verificationMessage)}</p>
           )}
         </div>
 
