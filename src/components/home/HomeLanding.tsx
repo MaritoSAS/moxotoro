@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   CalendarDays,
@@ -32,6 +32,7 @@ import {
   getMinBookingDate,
   isDateBookable,
 } from "@/lib/booking";
+import { clearActiveBooking, readActiveBooking, writeActiveBooking } from "@/lib/activeBooking";
 import { stellarExpertTxUrl } from "@/lib/stellar";
 import type { Booking, CircuitStop } from "@/types/moxotoro";
 
@@ -82,6 +83,35 @@ export const HomeLanding: React.FC = () => {
   const [booking, setBooking] = useState<Booking | null>(null);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [confirmedTxHash, setConfirmedTxHash] = useState<string | null>(null);
+  const bookingRef = useRef(booking);
+  bookingRef.current = booking;
+
+  useEffect(() => {
+    if (bookingRef.current) return;
+    const saved = readActiveBooking();
+    if (!saved) return;
+
+    const hash = saved.paidTxHash ?? saved.booking.stellarTxHash ?? null;
+    setBooking(saved.booking);
+    setConfirmedTxHash(hash);
+    setCustomerName(saved.booking.customerName);
+    setCustomerEmail(saved.booking.customerEmail);
+    setCustomerPhone(saved.booking.customerPhone);
+    setDate(saved.booking.date);
+    setTimeSlotId(saved.booking.timeSlotId);
+    setPricingOptionId(saved.booking.pricingOptionId);
+    setParticipantsCount(saved.booking.participantsCount);
+    setIncludeWalpac(saved.booking.includeWalpacAddon);
+    if (!hash) setCheckoutOpen(true);
+  }, []);
+
+  useEffect(() => {
+    if (!booking) return;
+    writeActiveBooking({
+      booking,
+      paidTxHash: confirmedTxHash ?? booking.stellarTxHash ?? null,
+    });
+  }, [booking, confirmedTxHash]);
 
   const selectedOption =
     MOXOTORO_CONFIG.pricing.options.find((option) => option.id === pricingOptionId) ??
@@ -148,8 +178,9 @@ export const HomeLanding: React.FC = () => {
       includeWalpac,
     });
 
-    setBooking(nextBooking);
+    clearActiveBooking();
     setConfirmedTxHash(null);
+    setBooking(nextBooking);
     setCheckoutOpen(true);
   };
 
