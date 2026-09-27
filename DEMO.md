@@ -2,6 +2,16 @@
 
 Recorrido para el video del Argentina Builder Challenge. La seña se verifica en Horizon Testnet con el checkout que ya está en el producto. Esta guía no simula un pago.
 
+## Video publicado para el jurado
+
+Estos archivos están en `public/demo/` y Vercel los sirve como estáticos, sin login:
+
+- Demo (recorrido completo, ~110 s): https://moxotoro.vercel.app/demo/moxotoro-demo-e2e.mp4
+- Poster del demo: https://moxotoro.vercel.app/demo/moxotoro-demo-e2e-poster.png
+- Promo corta: https://moxotoro.vercel.app/demo/moxotoro-promo-16x9.mp4
+
+El enlace que tiene que abrir el jurado es el MP4 del demo. En local, las mismas rutas quedan en `http://localhost:3000/demo/…`.
+
 ## Antes de grabar
 
 1. Billetera (LOBSTR o Freighter) en **Testnet**, con USDC del emisor Circle. XLM no acredita la seña.
