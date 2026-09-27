@@ -93,9 +93,15 @@ En el modal:
 4. Si Horizon encuentra el pago, el estado pasa a **Confirmado** y muestra el enlace a stellar.expert. Si aún no está, queda **Pendiente**. Si el monto, el activo o Horizon no cierran, queda **Fallido**.
 5. Refrescá la página en la misma pestaña: el memo y, si ya se verificó, el hash siguen asociados. Una reserva nueva reemplaza lo guardado.
 
-## Cómo grabar la demo
+## Demo para el jurado
 
-El click path (experiencia, reserva, seña, Stellar, verificación en Horizon y confirmación) está en [DEMO.md](./DEMO.md). La verificación de la seña sigue siendo la consulta real a Horizon Testnet.
+El video del recorrido (reserva → seña → USDC Testnet → verificación → stellar.expert) está publicado sin login:
+
+- https://moxotoro.vercel.app/demo/moxotoro-demo-e2e.mp4
+- Poster: https://moxotoro.vercel.app/demo/moxotoro-demo-e2e-poster.png
+- Promo: https://moxotoro.vercel.app/demo/moxotoro-promo-16x9.mp4
+
+Archivos en `public/demo/`. El click path para volver a grabar está en [DEMO.md](./DEMO.md). La verificación de la seña sigue siendo la consulta real a Horizon Testnet.
 
 ## Equipo
 
