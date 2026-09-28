@@ -156,7 +156,7 @@ export const HomeLanding: React.FC = () => {
     }
     if (!booking) {
       setDemoFocus(3);
-      setPathHint("Iniciá la reserva para abrir el pago USDC en Stellar.");
+      setPathHint("Iniciá la reserva para abrir el pago USD en Stellar.");
       scrollToId("sena");
       return;
     }
@@ -274,7 +274,7 @@ export const HomeLanding: React.FC = () => {
               {MOXOTORO_CONFIG.brand.destination}
             </p>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#9ca3af]">
-              Circuito patrimonial Camino Real / Qhapaq Ñan en La Caldera. Seña en USDC sobre
+              Circuito patrimonial Camino Real / Qhapaq Ñan en La Caldera. Seña en USD sobre
               Stellar testnet, cupos por turno y protocolo climático documentado. Ex{" "}
               {MOXOTORO_CONFIG.brand.historicalName}.
             </p>
@@ -303,7 +303,7 @@ export const HomeLanding: React.FC = () => {
                 { label: "Recorrido", value: "2,8 km · 5 paradas" },
                 {
                   label: "Seña",
-                  value: `${MOXOTORO_CONFIG.pricing.depositPercentage}% USDC`,
+                  value: `${MOXOTORO_CONFIG.pricing.depositPercentage}% USD`,
                 },
                 {
                   label: "Cupo",
@@ -369,8 +369,8 @@ export const HomeLanding: React.FC = () => {
                 Elegí la experiencia
               </h2>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[#9ca3af]">
-                Precio de referencia en USDC y ARS. La seña del{" "}
-                {MOXOTORO_CONFIG.pricing.depositPercentage}% confirma el cupo. El pago es USDC en
+                Precio de referencia en USD y ARS. La seña del{" "}
+                {MOXOTORO_CONFIG.pricing.depositPercentage}% confirma el cupo. El pago es USD en
                 Stellar <strong className="text-emerald-400">{MOXOTORO_CONFIG.stellar.network}</strong>
                 . El saldo se abona al iniciar la salida.
               </p>
@@ -415,13 +415,13 @@ export const HomeLanding: React.FC = () => {
                       Precio por persona
                     </p>
                     <p className="text-2xl font-bold text-[#f5f0e8]">
-                      {option.priceUsdc} USDC
+                      {option.priceUsdc} USD
                       <span className="ml-2 text-sm font-normal text-[#9ca3af]">
                         · ${formatArs(option.priceArs)} ARS
                       </span>
                     </p>
                     <p className="mt-2 text-sm font-semibold text-[#c4a962]">
-                      Seña {MOXOTORO_CONFIG.pricing.depositPercentage}%: {depositPerPerson.toFixed(2)} USDC por persona
+                      Seña {MOXOTORO_CONFIG.pricing.depositPercentage}%: {depositPerPerson.toFixed(2)} USD por persona
                     </p>
                   </button>
                 );
@@ -438,7 +438,7 @@ export const HomeLanding: React.FC = () => {
                 <div className="rounded-xl border border-white/10 bg-[#0d1b2a]/80 px-3 py-3">
                   <dt className="text-[10px] uppercase tracking-wider text-[#9ca3af]">Precio</dt>
                   <dd className="mt-1 text-lg font-bold text-[#f5f0e8]">
-                    {selectedOption.priceUsdc} USDC
+                    {selectedOption.priceUsdc} USD
                     <span className="mt-0.5 block text-[11px] font-normal text-[#9ca3af]">
                       ${formatArs(selectedOption.priceArs)} ARS por persona
                     </span>
@@ -447,7 +447,7 @@ export const HomeLanding: React.FC = () => {
                 <div className="rounded-xl border border-[#c4a962]/40 bg-[#0d3d47]/50 px-3 py-3">
                   <dt className="text-[10px] uppercase tracking-wider text-[#c4a962]">Seña por persona</dt>
                   <dd className="mt-1 text-lg font-bold text-[#c4a962]">
-                    {((selectedOption.priceUsdc * MOXOTORO_CONFIG.pricing.depositPercentage) / 100).toFixed(2)} USDC
+                    {((selectedOption.priceUsdc * MOXOTORO_CONFIG.pricing.depositPercentage) / 100).toFixed(2)} USD
                     <span className="mt-0.5 block text-[11px] font-normal text-[#e8e2d6]">
                       {MOXOTORO_CONFIG.pricing.depositPercentage}% del precio
                     </span>
@@ -613,7 +613,7 @@ export const HomeLanding: React.FC = () => {
                   />
                   <span>
                     Sumar extensión Casa de los Pájaros (Walpac) · +
-                    {MOXOTORO_CONFIG.pricing.walpacAddon.priceUsdc} USDC por persona
+                    {MOXOTORO_CONFIG.pricing.walpacAddon.priceUsdc} USD por persona
                   </span>
                 </label>
 
@@ -637,7 +637,7 @@ export const HomeLanding: React.FC = () => {
               >
                 <div>
                   <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#c4a962]">
-                    3 · Seña USDC
+                    3 · Seña USD
                   </p>
                   <h3 className="mt-1 flex items-center gap-2 text-sm font-semibold text-[#f5f0e8]">
                     <ShieldCheck className="h-4 w-4 text-[#c4a962]" />
@@ -671,7 +671,7 @@ export const HomeLanding: React.FC = () => {
                     Total de la experiencia
                   </p>
                   <p className="mt-1 text-3xl font-bold tracking-tight text-[#f5f0e8]">
-                    {quote.totalPriceUsdc.toFixed(2)} USDC
+                    {quote.totalPriceUsdc.toFixed(2)} USD
                   </p>
                   <p className="text-sm text-[#9ca3af]">${formatArs(quote.totalPriceArs)} ARS</p>
                 </div>
@@ -681,11 +681,11 @@ export const HomeLanding: React.FC = () => {
                     Seña requerida hoy · {MOXOTORO_CONFIG.pricing.depositPercentage}%
                   </p>
                   <p className="mt-1 text-4xl font-bold tracking-tight text-[#c4a962]">
-                    {quote.depositRequiredUsdc.toFixed(2)} USDC
+                    {quote.depositRequiredUsdc.toFixed(2)} USD
                   </p>
                   <p className="text-sm text-[#e8e2d6]">
                     ${formatArs(quote.depositRequiredArs)} ARS · saldo al iniciar{" "}
-                    {quote.balanceDueUsdc.toFixed(2)} USDC
+                    {quote.balanceDueUsdc.toFixed(2)} USD
                   </p>
                 </div>
 
@@ -694,7 +694,7 @@ export const HomeLanding: React.FC = () => {
                     Medio de pago
                   </p>
                   <p className="mt-1 text-base font-bold text-[#f5f0e8]">
-                    USDC · Stellar {MOXOTORO_CONFIG.stellar.network}
+                    USD · Stellar {MOXOTORO_CONFIG.stellar.network}
                   </p>
                   <p className="mt-1 text-[11px] leading-relaxed text-[#9ca3af]">
                     El checkout abre la seña existente (SEP-0007). Horizon verifica memo, destino, activo y monto.
@@ -729,7 +729,7 @@ export const HomeLanding: React.FC = () => {
                       {booking.pricingOptionTitle} · {formatDateLongEs(booking.date)} · {booking.timeSlotLabel}
                     </p>
                     <p className="mt-1 text-xs">
-                      Total {booking.totalPriceUsdc.toFixed(2)} USDC · seña {booking.depositRequiredUsdc.toFixed(2)} USDC
+                      Total {booking.totalPriceUsdc.toFixed(2)} USD · seña {booking.depositRequiredUsdc.toFixed(2)} USD
                     </p>
                     <p className="mt-1 font-mono text-[10px] break-all">Memo {booking.memoId}</p>
                     <p className="mt-1 font-mono text-[10px] break-all">Tx {confirmedTxHash}</p>
@@ -763,7 +763,7 @@ export const HomeLanding: React.FC = () => {
                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#c4a962] py-3 text-xs font-bold uppercase tracking-wider text-[#0a0a0a] hover:bg-[#dfc888]"
                   >
                     <Wallet className="h-4 w-4" />
-                    Continuar pago USDC en Stellar
+                    Continuar pago USD en Stellar
                   </button>
                 )}
 
@@ -792,7 +792,7 @@ export const HomeLanding: React.FC = () => {
                   Coordinar por WhatsApp
                 </a>
                 <p className="text-[10px] leading-relaxed text-[#9ca3af]">
-                  USDC Testnet (emisor Circle) · verificación en Horizon. Solo clave pública
+                  USD Testnet (emisor Circle) · verificación en Horizon. Solo clave pública
                   receptora; no uses mainnet.
                 </p>
               </aside>

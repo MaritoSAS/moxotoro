@@ -276,7 +276,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       <span className="block text-sm font-semibold text-[#f5f0e8]">{option.title}</span>
                       <span className="block text-[11px] text-[#9ca3af] mt-0.5">{option.description}</span>
                       <span className="block text-xs text-[#c4a962] mt-1">
-                        {option.priceUsdc} USDC · ${option.priceArs.toLocaleString("es-AR")} ARS
+                        {option.priceUsdc} USD · ${option.priceArs.toLocaleString("es-AR")} ARS
                       </span>
                     </span>
                   </label>
@@ -313,7 +313,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
             />
             <span className="text-xs text-[#e8e2d6]">
               Sumar extensión Casa de los Pájaros (Walpac) — +{MOXOTORO_CONFIG.pricing.walpacAddon.priceUsdc}{" "}
-              USDC por persona
+              USD por persona
             </span>
           </label>
         </div>
@@ -325,9 +325,9 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
             <Wallet className="h-3.5 w-3.5 text-[#c4a962]" />
             Seña a abonar hoy ({MOXOTORO_CONFIG.pricing.depositPercentage}%)
           </p>
-          <p className="text-2xl font-bold text-[#c4a962]">{totals.depositRequiredUsdc.toFixed(2)} USDC</p>
+          <p className="text-2xl font-bold text-[#c4a962]">{totals.depositRequiredUsdc.toFixed(2)} USD</p>
           <p className="text-xs text-[#9ca3af]">
-            Total {totals.totalPriceUsdc.toFixed(2)} USDC · saldo al iniciar {totals.balanceDueUsdc.toFixed(2)} USDC
+            Total {totals.totalPriceUsdc.toFixed(2)} USD · saldo al iniciar {totals.balanceDueUsdc.toFixed(2)} USD
           </p>
         </div>
         <button

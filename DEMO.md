@@ -20,15 +20,15 @@ El enlace que tiene que abrir el jurado es el MP4 del demo. En local, las mismas
 
 ## Click path
 
-La barra de arriba marca el paso: **Experiencia → Reserva → Seña USDC → Stellar → Verificación → Confirmación**.
+La barra de arriba marca el paso: **Experiencia → Reserva → Seña USD → Stellar → Verificación → Confirmación**.
 
 1. Entrá a la home. Tocá **Ver la experiencia**.
 2. **Experiencia.** Elegí la tarjeta con traslado o la de punto de encuentro. En la tarjeta y en el bloque de abajo se leen la descripción, el precio por persona, la seña y las condiciones (seña no reembolsable, mínimo de participantes, cierre del día anterior).
 3. **Reserva.** Bajá a **Reservá tu salida**. Elegí un día habilitado en el calendario, el turno mañana o tarde, la cantidad de participantes y nombre, correo y teléfono.
-4. **Seña USDC.** En el panel de la derecha, el **total de la experiencia** y la **seña requerida hoy** están en grande. El medio de pago dice **USDC · Stellar TESTNET**.
-5. Tocá **Iniciar reserva**. Se abre el checkout existente: monto total, seña, USDC en Stellar, QR SEP-0007, cuenta receptora y memo `MOXO-…`.
+4. **Seña USD.** En el panel de la derecha, el **total de la experiencia** y la **seña requerida hoy** están en grande. El medio de pago dice **USD · Stellar TESTNET**.
+5. Tocá **Iniciar reserva**. Se abre el checkout existente: monto total, seña, USD en Stellar, QR SEP-0007, cuenta receptora y memo `MOXO-…`.
 6. Pagá ese monto en USDC Testnet con el memo de la reserva.
 7. **Verificación.** Tocá **Verificar Acreditación de Seña en Stellar**. El estado pasa a **Pendiente** (Horizon todavía no ve el pago), **Confirmado** (memo, destino, activo y monto cierran) o **Fallido** (monto, activo u error de Horizon).
 8. **Confirmación.** Con **Confirmado**, el modal muestra el hash y el enlace a stellar.expert. Al cerrarlo, el mismo estado queda en el panel de la seña. Recargar la pestaña conserva la reserva (`sessionStorage`, clave `moxotoro.activeBooking`).
 
-Si cerrás el modal antes de pagar, **Continuar pago USDC en Stellar** reabre el mismo memo. No genera un pago paralelo.
+Si cerrás el modal antes de pagar, **Continuar pago USD en Stellar** reabre el mismo memo. No genera un pago paralelo.
