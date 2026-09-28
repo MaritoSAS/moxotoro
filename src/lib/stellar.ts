@@ -147,7 +147,7 @@ export async function verifyTransactionByMemo(
       return {
         verified: false,
         outcome: "failed",
-        message: `Hay un pago USDC con ese memo, pero el monto no coincide con la seña de ${expectedAmountUsdc.toFixed(2)} USDC.`,
+        message: `Hay un pago USD con ese memo, pero el monto no coincide con la seña de ${expectedAmountUsdc.toFixed(2)} USD.`,
       };
     }
 
@@ -156,7 +156,7 @@ export async function verifyTransactionByMemo(
         verified: false,
         outcome: "failed",
         message:
-          "Hay un pago con ese memo, pero el activo no es el USDC del emisor configurado.",
+          "Hay un pago con ese memo, pero el activo no es el USD del emisor configurado.",
       };
     }
 

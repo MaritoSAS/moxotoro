@@ -200,7 +200,7 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
               Total de la experiencia
             </span>
             <span className="text-2xl font-bold text-[#f5f0e8]">
-              {booking.totalPriceUsdc.toFixed(2)} USDC
+              {booking.totalPriceUsdc.toFixed(2)} USD
             </span>
             <span className="mt-0.5 block text-[11px] text-[#9ca3af]">
               ${booking.totalPriceArs.toLocaleString("es-AR")} ARS
@@ -211,10 +211,10 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
               Seña requerida ({depositPercent}%)
             </span>
             <span className="text-2xl font-bold text-[#c4a962]">
-              {booking.depositRequiredUsdc.toFixed(2)} USDC
+              {booking.depositRequiredUsdc.toFixed(2)} USD
             </span>
             <span className="mt-0.5 block text-[11px] text-[#e8e2d6]">
-              ${booking.depositRequiredArs.toLocaleString("es-AR")} ARS · saldo {booking.balanceDueUsdc.toFixed(2)} USDC
+              ${booking.depositRequiredArs.toLocaleString("es-AR")} ARS · saldo {booking.balanceDueUsdc.toFixed(2)} USD
             </span>
           </div>
         </div>
@@ -222,7 +222,7 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
         <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/30 px-3 py-2">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-300">Medio de pago</p>
           <p className="text-sm font-bold text-[#f5f0e8]">
-            USDC · Stellar {MOXOTORO_CONFIG.stellar.network}
+            USD · Stellar {MOXOTORO_CONFIG.stellar.network}
           </p>
         </div>
 
@@ -330,7 +330,7 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
               </button>
             </div>
             <p className="mt-1 text-[10px] leading-relaxed text-[#9ca3af]">
-              {MOXOTORO_CONFIG.stellar.assetCode} Testnet · emisor Circle{" "}
+              USD Testnet · emisor Circle{" "}
               <span className="font-mono break-all">{MOXOTORO_CONFIG.stellar.assetIssuer}</span>
             </p>
           </div>

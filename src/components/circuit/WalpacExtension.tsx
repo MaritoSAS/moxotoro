@@ -70,7 +70,7 @@ export const WalpacExtension: React.FC<WalpacExtensionProps> = ({
             <div className="flex items-start gap-2">
               <Check className="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
               <span>
-                <strong>Vinculación directa:</strong> Podés sumar esta extensión a tu reserva del Camino Real por sólo <strong>+{walpacConfig.priceUsdc} USDC</strong> (${walpacConfig.priceArs.toLocaleString("es-AR")} ARS) por persona.
+                <strong>Vinculación directa:</strong> Podés sumar esta extensión a tu reserva del Camino Real por sólo <strong>+{walpacConfig.priceUsdc} USD</strong> (${walpacConfig.priceArs.toLocaleString("es-AR")} ARS) por persona.
               </span>
             </div>
           </div>

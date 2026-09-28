@@ -11,7 +11,7 @@ Reservar y cobrar una experiencia guiada (circuito Camino Real / Qhapaq Ñan) co
 App Next.js publicada en [https://moxotoro.vercel.app](https://moxotoro.vercel.app):
 
 - Circuito y paradas (mapa + GeoJSON)
-- Tarifas en USDC / ARS, seña configurable y extensión Walpac
+- Tarifas en USD / ARS, seña configurable y extensión Walpac
 - Checkout de seña en **Stellar Testnet** (SEP-0007 USDC). Horizon verifica memo, destino, activo y monto
 - Estados de pago en el checkout: **Pendiente**, **Confirmado** y **Fallido**
 - Políticas de seña y clima documentadas en producto
