@@ -79,6 +79,12 @@ body {
   animation: hero-kenburns 32s ease-in-out infinite alternate;
 }
 
+.hero-scrim {
+  background:
+    linear-gradient(to top, rgba(10, 10, 10, 0.92) 0%, rgba(10, 10, 10, 0.62) 26%, rgba(10, 10, 10, 0.18) 52%, rgba(10, 10, 10, 0.28) 100%),
+    linear-gradient(to right, rgba(10, 10, 10, 0.42) 0%, rgba(10, 10, 10, 0) 48%);
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(1.25rem);

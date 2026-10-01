@@ -21,20 +21,19 @@ export function ImmersiveHero({ onOpenBooking }: ImmersiveHeroProps) {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[center_46%]"
+          className="object-cover object-[center_38%]"
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/72 to-[#0d1b2a]/35" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/55 via-[#0a0a0a]/15 to-transparent" />
+      <div className="hero-scrim pointer-events-none absolute inset-0" />
 
       <Reveal className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-12 pt-16 sm:px-6 sm:pb-16 lg:px-8 lg:pb-20">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#c4a962]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#c4a962] drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)]">
           La Caldera · Salta
         </p>
-        <h1 className="mt-4 max-w-4xl text-[2.05rem] font-bold leading-[1.08] tracking-tight text-[#f5f0e8] sm:text-5xl lg:text-[3.5rem]">
+        <h1 className="mt-4 max-w-4xl text-[2.05rem] font-bold leading-[1.08] tracking-tight text-[#f5f0e8] drop-shadow-[0_2px_18px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-[3.5rem]">
           Descubrí La Caldera de la mano de quien la vive
         </h1>
-        <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-[#e8e2d6] sm:text-xl">
+        <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-[#e8e2d6] drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)] sm:text-xl">
           Experiencias auténticas en el Camino Real, Salta.
         </p>
         <button
