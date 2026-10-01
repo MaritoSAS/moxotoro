@@ -33,6 +33,8 @@ import {
 } from "@/lib/booking";
 import { clearActiveBooking, readActiveBooking, writeActiveBooking } from "@/lib/activeBooking";
 import { stellarExpertTxUrl } from "@/lib/stellar";
+import { CheckInPanel } from "@/components/payment/CheckInPanel";
+import { confirmDepositAction, saveBookingAction } from "@/server/bookingActions";
 import type { Booking, CircuitStop } from "@/types/moxotoro";
 
 const CIRCUIT_STOPS = getCircuitStops();
@@ -218,15 +220,31 @@ export const HomeLanding: React.FC = () => {
     setConfirmedTxHash(null);
     setBooking(nextBooking);
     setCheckoutOpen(true);
+    void saveBookingAction(nextBooking);
   };
 
   const handlePaymentSuccess = (txHash: string) => {
     setBooking((current) =>
       current
-        ? { ...current, status: "deposit_paid", stellarTxHash: txHash, isStellarPayment: true }
+        ? {
+            ...current,
+            status: "deposit_paid",
+            stellarTxHash: txHash,
+            isStellarPayment: true,
+            depositPaidAt: new Date().toISOString(),
+          }
         : current
     );
     setConfirmedTxHash(txHash);
+    if (booking) {
+      void confirmDepositAction({
+        ...booking,
+        status: "deposit_paid",
+        stellarTxHash: txHash,
+        isStellarPayment: true,
+        depositPaidAt: new Date().toISOString(),
+      });
+    }
   };
 
   const whatsAppUrl = buildWhatsAppReservationUrl({
@@ -687,6 +705,10 @@ export const HomeLanding: React.FC = () => {
                   </div>
                 )}
 
+              {booking && (booking.status === "deposit_paid" || booking.status === "confirmed_full") && (
+                <CheckInPanel booking={booking} onCheckedIn={setBooking} />
+              )}
+
                 {formError && (
                   <p className="rounded-lg border border-rose-500/30 bg-rose-950/40 px-3 py-2 text-xs text-rose-200">
                     {formError}
@@ -778,6 +800,9 @@ export const HomeLanding: React.FC = () => {
               className="text-emerald-300 hover:text-emerald-200"
             >
               WhatsApp reservas
+            </a>
+            <a href="/admin" className="text-[#9ca3af] hover:text-[#c4a962]">
+              Administración
             </a>
           </div>
         </div>

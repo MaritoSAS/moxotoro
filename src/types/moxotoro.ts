@@ -38,6 +38,10 @@ export interface Booking {
   status: BookingStatus;
   isStellarPayment: boolean;
   stellarTxHash?: string;
+  depositPaidAt?: string;
+  checkedInAt?: string;
+  balanceTxHash?: string;
+  balancePaymentMethod?: "stellar" | "cash";
   createdAt: string;
   weatherIncident?: WeatherIncident;
 }

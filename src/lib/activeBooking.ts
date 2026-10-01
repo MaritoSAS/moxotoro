@@ -60,6 +60,16 @@ function isBooking(value: unknown): value is Booking {
   if (typeof value.includeWalpacAddon !== "boolean") return false;
   if (typeof value.isStellarPayment !== "boolean") return false;
   if (value.stellarTxHash !== undefined && typeof value.stellarTxHash !== "string") return false;
+  if (value.depositPaidAt !== undefined && typeof value.depositPaidAt !== "string") return false;
+  if (value.checkedInAt !== undefined && typeof value.checkedInAt !== "string") return false;
+  if (value.balanceTxHash !== undefined && typeof value.balanceTxHash !== "string") return false;
+  if (
+    value.balancePaymentMethod !== undefined &&
+    value.balancePaymentMethod !== "stellar" &&
+    value.balancePaymentMethod !== "cash"
+  ) {
+    return false;
+  }
 
   return true;
 }
