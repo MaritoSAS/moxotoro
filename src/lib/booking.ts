@@ -256,7 +256,9 @@ export function buildWhatsAppReservationUrl(params: {
   includeWalpac: boolean;
   depositUsdc: number;
 }): string {
-  const walpacLine = params.includeWalpac ? "Sí (Casa de los Pájaros)" : "No";
+  const walpacLine = params.includeWalpac
+    ? `Sí · ${MOXOTORO_CONFIG.pricing.walpacAddon.courtesyLabel} (0 USD / incluido)`
+    : "No";
   const text = encodeURIComponent(
     [
       "Hola MOXOTORO, quiero reservar el circuito Camino Real.",

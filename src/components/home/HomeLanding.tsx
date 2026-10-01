@@ -533,8 +533,8 @@ export const HomeLanding: React.FC = () => {
                     className="mt-1 accent-[#c4a962]"
                   />
                   <span>
-                    Sumar extensión Casa de los Pájaros (Walpac) · +
-                    {MOXOTORO_CONFIG.pricing.walpacAddon.priceUsdc} USD por persona
+                    Sumar Casa de los Pájaros (Walpac) ·{" "}
+                    {MOXOTORO_CONFIG.pricing.walpacAddon.courtesyLabel} (0 USD / incluido)
                   </span>
                 </label>
 
@@ -569,8 +569,30 @@ export const HomeLanding: React.FC = () => {
                 <dl className="space-y-2 text-sm">
                   <div className="flex justify-between gap-3 text-[#9ca3af]">
                     <dt>Experiencia</dt>
-                    <dd className="text-right text-[#e8e2d6]">{selectedOption.title}</dd>
+                    <dd className="text-right text-[#e8e2d6]">
+                      {selectedOption.title}
+                      <span className="mt-0.5 block text-[11px] text-[#f5f0e8]">
+                        {selectedOption.priceUsdc.toFixed(2)} USD
+                      </span>
+                    </dd>
                   </div>
+                  {includeWalpac && (
+                    <div className="flex justify-between gap-3 text-[#9ca3af]">
+                      <dt>Casa de los Pájaros</dt>
+                      <dd className="text-right text-[#e8e2d6]">
+                        {MOXOTORO_CONFIG.pricing.walpacAddon.courtesyLabel}
+                        <span className="mt-0.5 block text-[11px]">0 USD / incluido</span>
+                      </dd>
+                    </div>
+                  )}
+                  {includeWalpac && (
+                    <div className="flex justify-between gap-3 text-[#9ca3af]">
+                      <dt>Precio por persona</dt>
+                      <dd className="text-right font-semibold text-[#f5f0e8]">
+                        {selectedOption.priceUsdc.toFixed(2)} USD
+                      </dd>
+                    </div>
+                  )}
                   <div className="flex justify-between gap-3 text-[#9ca3af]">
                     <dt>Salida</dt>
                     <dd className="text-right text-[#e8e2d6]">

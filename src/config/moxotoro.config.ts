@@ -51,13 +51,15 @@ export const MOXOTORO_CONFIG = {
     allowFullPayment: true,
     arsUsdRate: 1000, // Tasa referencial para cálculos en pesos
 
-    // Experiencia complementaria Casa de los Pájaros (Walpac)
+    // Casa de los Pájaros es una invitación de cortesía: no suma al precio ni a la seña.
+    // El precio de la experiencia (31 USD con traslado) ya es el total; esta línea queda en 0.
     walpacAddon: {
       id: "walpac-extension",
       title: "Extensión Contemplativa: Casa de los Pájaros (Taller Walpac)",
       description: "Visita al taller y murales del artista Walpac al cierre del circuito. Incluye momento de contemplación y encuentro con el artista.",
-      priceUsdc: 5,
-      priceArs: 5000,
+      priceUsdc: 0,
+      priceArs: 0,
+      courtesyLabel: "Invitación de cortesía",
     },
   },
 

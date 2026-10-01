@@ -312,8 +312,8 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
               className="mt-1 accent-[#c4a962]"
             />
             <span className="text-xs text-[#e8e2d6]">
-              Sumar extensión Casa de los Pájaros (Walpac) — +{MOXOTORO_CONFIG.pricing.walpacAddon.priceUsdc}{" "}
-              USD por persona
+              Sumar Casa de los Pájaros (Walpac) — {MOXOTORO_CONFIG.pricing.walpacAddon.courtesyLabel}{" "}
+              (0 USD / incluido)
             </span>
           </label>
         </div>
