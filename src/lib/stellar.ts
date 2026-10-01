@@ -26,6 +26,17 @@ export function getHorizonServer(): Horizon.Server {
  * Enlace SEP-0007 para pagar la seña en USDC (LOBSTR, Freighter y otras billeteras).
  * Incluye `asset_issuer` para que la billetera no envíe XLM ni otro USDC.
  */
+/** Sufijo del memo de saldo. MOXO-XXXXXX-SALDO cabe en los 28 bytes de MEMO_TEXT. */
+export const BALANCE_MEMO_SUFFIX = "-SALDO";
+
+export function balanceMemoId(depositMemoId: string): string {
+  const memo = `${depositMemoId}${BALANCE_MEMO_SUFFIX}`;
+  if (new TextEncoder().encode(memo).length > 28) {
+    throw new Error("El memo del saldo supera los 28 bytes de MEMO_TEXT.");
+  }
+  return memo;
+}
+
 export function generateSep0007Uri(params: {
   amountUsdc: number;
   memo: string;
@@ -89,6 +100,7 @@ function amountsMatch(paidAmount: string, expectedAmountUsdc: number): boolean {
 export async function verifyTransactionByMemo(
   memoId: string,
   expectedAmountUsdc?: number,
+  purpose: "deposit" | "balance" = "deposit",
 ): Promise<VerificationResult> {
   const server = getHorizonServer();
   const receiverAccount = MOXOTORO_CONFIG.stellar.receiverPublicKey;
@@ -139,7 +151,10 @@ export async function verifyTransactionByMemo(
         amount: record.amount,
         sourceAccount: record.from,
         timestamp: record.created_at,
-        message: "Seña verificada en Horizon testnet.",
+        message:
+          purpose === "balance"
+            ? "Saldo verificado en Horizon testnet."
+            : "Seña verificada en Horizon testnet.",
       };
     }
 
@@ -147,7 +162,10 @@ export async function verifyTransactionByMemo(
       return {
         verified: false,
         outcome: "failed",
-        message: `Hay un pago USD con ese memo, pero el monto no coincide con la seña de ${expectedAmountUsdc.toFixed(2)} USD.`,
+        message:
+          purpose === "balance"
+            ? `Hay un pago USD con ese memo, pero el monto no coincide con el saldo de ${expectedAmountUsdc.toFixed(2)} USD.`
+            : `Hay un pago USD con ese memo, pero el monto no coincide con la seña de ${expectedAmountUsdc.toFixed(2)} USD.`,
       };
     }
 
@@ -163,7 +181,10 @@ export async function verifyTransactionByMemo(
     return {
       verified: false,
       outcome: "pending",
-      message: "No se detectó aún la transacción con el identificador de seña en el ledger.",
+      message:
+        purpose === "balance"
+          ? "No se detectó aún la transacción del saldo en el ledger."
+          : "No se detectó aún la transacción con el identificador de seña en el ledger.",
     };
   } catch (error) {
     const status =

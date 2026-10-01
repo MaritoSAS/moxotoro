@@ -17,7 +17,7 @@ App Next.js publicada en [https://moxotoro.vercel.app](https://moxotoro.vercel.a
 - Políticas de seña y clima documentadas en producto
 - Reserva en la home con calendario mensual (español Argentina) y turnos mañana/tarde
 
-La reserva activa (memo, estado y hash de la seña si ya se verificó) se guarda en `sessionStorage` bajo `moxotoro.activeBooking`. Un refresh en la misma pestaña no pierde esa asociación. No usa `localStorage` ni backend. Se borra al generar una reserva nueva; cerrar el modal no la borra, para que el memo y el hash sigan visibles después de refrescar.
+La reserva activa (memo, estado y hash de la seña si ya se verificó) se guarda en `sessionStorage` bajo `moxotoro.activeBooking`. Un refresh en la misma pestaña no pierde esa asociación. No usa `localStorage`. Si Upstash está configurado, la misma reserva también se guarda en el servidor al crearla y cuando Horizon verifica la seña. Sin esas variables, la home sigue igual que antes: solo la pestaña del cliente.
 
 ## Stack
 
@@ -55,9 +55,23 @@ Build de verificación:
 npm run build
 ```
 
-### Variable opcional
+### Variables de entorno
 
-`NEXT_PUBLIC_ALLOW_PAYMENT_SIMULATION=true` muestra el botón de simulación en el checkout. Si la variable no está definida, o tiene otro valor, el botón no aparece. La verificación de una seña real sigue siendo Horizon Testnet.
+No hay secretos en el repositorio. En Vercel (proyecto de moxotoro.vercel.app):
+
+1. **Upstash Redis** (Vercel Marketplace → Storage → Upstash, o `vercel integration add upstash`). Conectalo a este proyecto. Vercel inyecta `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`. Ahí se guardan las reservas al crearlas y al verificar la seña o el saldo.
+2. **`ADMIN_PASSWORD`**: en Project Settings → Environment Variables, una contraseña larga para `/admin`. El servidor la compara y deja una cookie `httpOnly`. No la pongas en el cliente ni en el repo.
+
+Si faltan las variables de Upstash, la reserva sigue en `sessionStorage` y `/admin` avisa que no hay base. `ADMIN_PASSWORD` vacía deja el login cerrado.
+
+Opcional, solo en local y fuera de producción: `MOXOTORO_MEMORY_BOOKINGS=1` guarda las reservas en la memoria del proceso de `next dev` para probar el panel sin Upstash. No sirve en Vercel.
+
+`NEXT_PUBLIC_ALLOW_PAYMENT_SIMULATION=true` muestra el botón de simulación en el checkout. Si la variable no está definida, o tiene otro valor, el botón no aparece. La verificación de una seña real sigue siendo Horizon Testnet. Una seña simulada no se marca pagada en la base, porque el servidor vuelve a consultar Horizon.
+
+### Panel y check-in
+
+- `/admin`: reservas de hoy y próximas, estados Reservada / Seña pagada / Check-in confirmado, ingresos (seña, saldo, total) y confirmaciones nuevas desde la última visita. Solo ahí está **Saldo cobrado en efectivo**, que marca el saldo y el check-in.
+- Con la seña verificada, la reserva muestra **Hacer check-in**: QR y enlace SEP-0007 del saldo (mismo receptor y mismo USDC, memo `MOXO-XXXXXX-SALDO`) y **Verificar saldo en Horizon**. El cliente no puede marcar efectivo.
 
 ## Qué muestra la home
 
