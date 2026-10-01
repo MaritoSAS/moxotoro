@@ -247,7 +247,6 @@ export const HomeLanding: React.FC = () => {
 
       <main>
         <ImmersiveHero onOpenBooking={handleOpenBooking} />
-        <AnfitrionaSection />
 
         <section id="circuito" className="scroll-mt-36 mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <CircuitStops
@@ -725,6 +724,8 @@ export const HomeLanding: React.FC = () => {
         <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <WeatherPolicySection />
         </section>
+
+        <AnfitrionaSection />
       </main>
 
       <footer className="border-t border-[#c4a962]/20 bg-[#0d1b2a] px-4 py-8 sm:px-6 lg:px-8">
