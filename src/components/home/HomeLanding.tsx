@@ -6,17 +6,16 @@ import {
   CalendarDays,
   CheckCircle2,
   Clock,
-  Compass,
-  MapPin,
   MessageCircle,
   ShieldCheck,
-  Sparkles,
   Sun,
   Sunset,
   Users,
   Wallet,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
+import { ImmersiveHero } from "@/components/home/ImmersiveHero";
+import { AnfitrionaSection } from "@/components/home/AnfitrionaSection";
 import { CircuitStops } from "@/components/circuit/CircuitStops";
 import { WalpacExtension } from "@/components/circuit/WalpacExtension";
 import { WeatherPolicySection } from "@/components/policy/WeatherPolicySection";
@@ -173,11 +172,6 @@ export const HomeLanding: React.FC = () => {
     scrollToId("reservar");
   };
 
-  const handleOpenExperience = () => {
-    setDemoFocus(1);
-    scrollToId("experiencia");
-  };
-
   const handleOpenBookingWithWalpac = () => {
     setIncludeWalpac(true);
     setDemoFocus(2);
@@ -252,80 +246,8 @@ export const HomeLanding: React.FC = () => {
       <Navbar onOpenBooking={handleOpenBooking} demoStep={demoStep} onDemoStep={handleDemoStep} />
 
       <main>
-        <section className="relative overflow-hidden border-b border-[#c4a962]/20">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/assets/circuits/banner-caldera.webp')" }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/85 to-[#0d3d47]/40" />
-          <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-            <p className="inline-flex items-center gap-2 rounded-full border border-[#c4a962]/40 bg-[#0d3d47]/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#c4a962]">
-              <Sparkles className="h-3.5 w-3.5" />
-              {MOXOTORO_CONFIG.brand.ancestralOrigin}
-            </p>
-            <h1 className="mt-5 max-w-3xl text-4xl font-bold tracking-tight text-[#f5f0e8] sm:text-5xl lg:text-6xl">
-              {MOXOTORO_CONFIG.brand.name}
-            </h1>
-            <p className="mt-3 text-xl font-light text-[#c4a962] sm:text-2xl">
-              {MOXOTORO_CONFIG.brand.tagline}
-            </p>
-            <p className="mt-4 flex items-center gap-2 text-sm text-[#e8e2d6]">
-              <MapPin className="h-4 w-4 text-[#c4a962]" />
-              {MOXOTORO_CONFIG.brand.destination}
-            </p>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#9ca3af]">
-              Circuito patrimonial Camino Real / Qhapaq Ñan en La Caldera. Seña en USD sobre
-              Stellar testnet, cupos por turno y protocolo climático documentado. Ex{" "}
-              {MOXOTORO_CONFIG.brand.historicalName}.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={handleOpenExperience}
-                className="flex items-center gap-2 rounded-lg bg-[#c4a962] px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#0a0a0a] shadow-lg hover:bg-[#dfc888]"
-              >
-                <Compass className="h-4 w-4" />
-                Ver la experiencia
-              </button>
-              <button
-                type="button"
-                onClick={handleOpenBooking}
-                className="flex items-center gap-2 rounded-lg border border-[#c4a962]/40 bg-[#0d1b2a]/80 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#e8e2d6] hover:border-[#c4a962] hover:text-[#c4a962]"
-              >
-                <Wallet className="h-4 w-4 text-[#c4a962]" />
-                Reservar salida
-              </button>
-            </div>
-
-            <div className="mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4">
-              {[
-                { label: "Recorrido", value: "2,8 km · 5 paradas" },
-                {
-                  label: "Seña",
-                  value: `${MOXOTORO_CONFIG.pricing.depositPercentage}% USD`,
-                },
-                {
-                  label: "Cupo",
-                  value: `${MOXOTORO_CONFIG.capacity.minParticipantsToConfirm}–${MOXOTORO_CONFIG.capacity.standardMaxParticipants} pers.`,
-                },
-                { label: "Red", value: `Stellar ${MOXOTORO_CONFIG.stellar.network}` },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-xl border border-white/10 bg-[#0a0a0a]/70 px-3 py-3 backdrop-blur-md"
-                >
-                  <p className="text-[10px] uppercase tracking-wider text-[#9ca3af]">{item.label}</p>
-                  <p className="mt-1 text-sm font-semibold text-[#f5f0e8]">{item.value}</p>
-                </div>
-              ))}
-            </div>
-
-            <p className="mt-6 max-w-3xl text-[11px] text-[#9ca3af]">
-              {MOXOTORO_CONFIG.brand.institutionalResolution} · {MOXOTORO_CONFIG.brand.standards}
-            </p>
-          </div>
-        </section>
+        <ImmersiveHero onOpenBooking={handleOpenBooking} />
+        <AnfitrionaSection />
 
         <section id="circuito" className="scroll-mt-36 mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <CircuitStops
