@@ -55,8 +55,8 @@ export const AdminDashboard: React.FC<{ overview: AdminOverview }> = ({ overview
             {overview.mode === "off"
               ? "Sin base configurada: el panel no puede listar reservas todavía."
               : overview.mode === "memory"
-                ? "Memoria local de desarrollo. En producción hace falta Upstash."
-                : "Guardadas en Upstash Redis."}
+                ? "Memoria local de desarrollo. En producción hace falta Redis."
+                : "Guardadas en Redis."}
           </p>
         </div>
         <form action={logoutAdminAction}>
