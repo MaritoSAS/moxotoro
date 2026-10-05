@@ -5,8 +5,13 @@ export const ADMIN_SEEN_COOKIE = "moxo_admin_seen";
 
 const SESSION_MESSAGE = "moxotoro-admin-session-v1";
 
+/** `ADMIN_PASSWORD` gana. La variante en español cubre la variable que el traductor del navegador creó en Vercel. */
+export function readAdminPassword(): string | undefined {
+  return process.env.ADMIN_PASSWORD ?? process.env["CONTRASEÑA_DE_ADMINISTRADOR"];
+}
+
 export function adminPasswordConfigured(): boolean {
-  return Boolean(process.env.ADMIN_PASSWORD);
+  return Boolean(readAdminPassword());
 }
 
 export function adminPasswordsMatch(input: string, expected: string): boolean {
@@ -21,7 +26,7 @@ export function adminSessionToken(password: string): string {
 }
 
 export function isAdminToken(token: string | undefined): boolean {
-  const password = process.env.ADMIN_PASSWORD;
+  const password = readAdminPassword();
   if (!password || !token) return false;
   const expected = adminSessionToken(password);
   const left = Buffer.from(token);

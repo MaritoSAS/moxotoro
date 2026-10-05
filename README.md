@@ -64,9 +64,9 @@ No hay secretos en el repositorio. En Vercel (proyecto de moxotoro.vercel.app):
    - **Upstash Redis** (REST). Si existen `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`, se usan esas y no la URL TCP.
 
    Ahí se guardan las reservas al crearlas y al verificar la seña o el saldo (hash `moxo:bookings`).
-2. **`ADMIN_PASSWORD`**: en Project Settings → Environment Variables, una contraseña larga para `/admin`. El servidor la compara y deja una cookie `httpOnly`. No la pongas en el cliente ni en el repo.
+2. **`ADMIN_PASSWORD`**: en Project Settings → Environment Variables, una contraseña larga para `/admin`. El servidor la compara y deja una cookie `httpOnly`. No la pongas en el cliente ni en el repo. Si el traductor del navegador renombró la variable, también vale `CONTRASEÑA_DE_ADMINISTRADOR`. Si existen las dos, gana `ADMIN_PASSWORD`.
 
-Si no hay Redis (ni `KV_REDIS_URL` / `REDIS_URL` ni el par de Upstash), la reserva sigue en `sessionStorage` y `/admin` avisa que no hay base. `ADMIN_PASSWORD` vacía deja el login cerrado.
+Si no hay Redis (ni `KV_REDIS_URL` / `REDIS_URL` ni el par de Upstash), la reserva sigue en `sessionStorage` y `/admin` avisa que no hay base. Sin `ADMIN_PASSWORD` ni `CONTRASEÑA_DE_ADMINISTRADOR`, el login queda cerrado.
 
 Opcional, solo en local y fuera de producción: `MOXOTORO_MEMORY_BOOKINGS=1` guarda las reservas en la memoria del proceso de `next dev` para probar el panel sin Redis. No sirve en Vercel.
 

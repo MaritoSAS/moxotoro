@@ -13,7 +13,8 @@ export const AdminLogin: React.FC<{ configured: boolean }> = ({ configured }) =>
       <p className="mt-2 text-sm text-[#9ca3af]">Ingresá la contraseña del panel. Las reservas de los visitantes no se ven sin ella.</p>
       {!configured && (
         <p className="mt-4 rounded-xl border border-amber-500/30 bg-amber-950/40 px-3 py-2 text-sm text-amber-100">
-          Falta <span className="font-mono">ADMIN_PASSWORD</span> en las variables de entorno del servidor.
+          Falta <span className="font-mono">ADMIN_PASSWORD</span> o{" "}
+          <span className="font-mono">CONTRASEÑA_DE_ADMINISTRADOR</span> en las variables de entorno del servidor.
         </p>
       )}
       <form action={action} className="mt-6 space-y-3">
