@@ -10,6 +10,7 @@ import {
   adminPasswordConfigured,
   adminSessionToken,
   isAdminToken,
+  readAdminPassword,
 } from "@/lib/adminSession";
 import {
   confirmCheckInFromHorizon,
@@ -38,10 +39,10 @@ export async function loginAdminAction(
   formData: FormData,
 ): Promise<{ error: string } | null> {
   if (!adminPasswordConfigured()) {
-    return { error: "Falta configurar ADMIN_PASSWORD en el servidor." };
+    return { error: "Falta configurar ADMIN_PASSWORD o CONTRASEÑA_DE_ADMINISTRADOR en el servidor." };
   }
   const password = String(formData.get("password") ?? "");
-  const expected = process.env.ADMIN_PASSWORD ?? "";
+  const expected = readAdminPassword() ?? "";
   if (!adminPasswordsMatch(password, expected)) {
     return { error: "Contraseña incorrecta." };
   }
