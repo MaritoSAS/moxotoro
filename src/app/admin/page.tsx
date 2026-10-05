@@ -5,6 +5,7 @@ import { ADMIN_COOKIE, ADMIN_SEEN_COOKIE, adminPasswordConfigured, isAdminToken 
 import { loadAdminOverview } from "@/lib/bookingRecords";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export default async function AdminPage() {
   const jar = await cookies();

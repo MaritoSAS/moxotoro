@@ -17,7 +17,7 @@ App Next.js publicada en [https://moxotoro.vercel.app](https://moxotoro.vercel.a
 - Políticas de seña y clima documentadas en producto
 - Reserva en la home con calendario mensual (español Argentina) y turnos mañana/tarde
 
-La reserva activa (memo, estado y hash de la seña si ya se verificó) se guarda en `sessionStorage` bajo `moxotoro.activeBooking`. Un refresh en la misma pestaña no pierde esa asociación. No usa `localStorage`. Si Upstash está configurado, la misma reserva también se guarda en el servidor al crearla y cuando Horizon verifica la seña. Sin esas variables, la home sigue igual que antes: solo la pestaña del cliente.
+La reserva activa (memo, estado y hash de la seña si ya se verificó) se guarda en `sessionStorage` bajo `moxotoro.activeBooking`. Un refresh en la misma pestaña no pierde esa asociación. No usa `localStorage`. Si Redis está configurado, la misma reserva también se guarda en el servidor al crearla y cuando Horizon verifica la seña. Sin esas variables, la home sigue igual que antes: solo la pestaña del cliente.
 
 ## Stack
 
@@ -59,12 +59,16 @@ npm run build
 
 No hay secretos en el repositorio. En Vercel (proyecto de moxotoro.vercel.app):
 
-1. **Upstash Redis** (Vercel Marketplace → Storage → Upstash, o `vercel integration add upstash`). Conectalo a este proyecto. Vercel inyecta `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`. Ahí se guardan las reservas al crearlas y al verificar la seña o el saldo.
+1. **Redis**, con una de estas dos integraciones en el proyecto:
+   - **Vercel Redis** (Redis Cloud, variables con prefijo `KV`). El servidor usa `KV_REDIS_URL` (URL TCP `redis://` o `rediss://`). Si esa variable no está, también acepta `REDIS_URL`.
+   - **Upstash Redis** (REST). Si existen `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`, se usan esas y no la URL TCP.
+
+   Ahí se guardan las reservas al crearlas y al verificar la seña o el saldo (hash `moxo:bookings`).
 2. **`ADMIN_PASSWORD`**: en Project Settings → Environment Variables, una contraseña larga para `/admin`. El servidor la compara y deja una cookie `httpOnly`. No la pongas en el cliente ni en el repo.
 
-Si faltan las variables de Upstash, la reserva sigue en `sessionStorage` y `/admin` avisa que no hay base. `ADMIN_PASSWORD` vacía deja el login cerrado.
+Si no hay Redis (ni `KV_REDIS_URL` / `REDIS_URL` ni el par de Upstash), la reserva sigue en `sessionStorage` y `/admin` avisa que no hay base. `ADMIN_PASSWORD` vacía deja el login cerrado.
 
-Opcional, solo en local y fuera de producción: `MOXOTORO_MEMORY_BOOKINGS=1` guarda las reservas en la memoria del proceso de `next dev` para probar el panel sin Upstash. No sirve en Vercel.
+Opcional, solo en local y fuera de producción: `MOXOTORO_MEMORY_BOOKINGS=1` guarda las reservas en la memoria del proceso de `next dev` para probar el panel sin Redis. No sirve en Vercel.
 
 `NEXT_PUBLIC_ALLOW_PAYMENT_SIMULATION=true` muestra el botón de simulación en el checkout. Si la variable no está definida, o tiene otro valor, el botón no aparece. La verificación de una seña real sigue siendo Horizon Testnet. Una seña simulada no se marca pagada en la base, porque el servidor vuelve a consultar Horizon.
 
