@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/nfc",
+        destination: "/tarjeta",
+        permanent: false,
+      },
+    ];
+  },
   turbopack: {
     rules: {
       "*.geojson": {
