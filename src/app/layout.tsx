@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "MOXOTORO — Experiencias Soberanas y Turismo Inteligente",
   description: "Plataforma de turismo consciente y circuitos patrimoniales en La Caldera, Salta. Donde cada camino cuenta una historia.",
-  keywords: ["Moxotoro", "La Caldera", "Salta", "Camino Real", "Qhapaq Ñan", "Turismo", "Walpac", "Stellar", "TravelTech"],
+  keywords: ["Moxotoro", "La Caldera", "Salta", "Camino Real", "Qhapaq Ñan", "Turismo", "Walpac", "TravelTech"],
   openGraph: {
     title: "MOXOTORO — Donde cada camino cuenta una historia",
     description: "Circuitos patrimoniales y experiencias auténticas en La Caldera, Salta.",

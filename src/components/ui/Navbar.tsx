@@ -61,8 +61,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, demoStep, onDemoS
           <a href="#politica" className="text-[#e8e2d6] hover:text-[#c4a962] transition-colors">
             Señas y Protocolo Clima
           </a>
-          <a href="#stellar" className="text-[#c4a962] hover:text-[#dfc888] transition-colors font-medium flex items-center gap-1">
-            <span>Stellar ABC</span>
+          <a href="#pago" className="text-[#c4a962] hover:text-[#dfc888] transition-colors font-medium flex items-center gap-1">
+            <span>Pago en USD</span>
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           </a>
         </nav>
@@ -144,11 +144,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, demoStep, onDemoS
             Señas y Protocolo Clima
           </a>
           <a
-            href="#stellar"
+            href="#pago"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-sm text-[#c4a962]"
           >
-            Stellar Builder Challenge
+            Pago en USD
           </a>
           <div className="pt-3 flex flex-col gap-2">
             <button

@@ -6,7 +6,7 @@ export const DEMO_STEPS = [
   { id: 1, label: "Experiencia" },
   { id: 2, label: "Reserva" },
   { id: 3, label: "Seña USD" },
-  { id: 4, label: "Stellar" },
+  { id: 4, label: "Pago" },
   { id: 5, label: "Verificación" },
   { id: 6, label: "Confirmación" },
 ] as const;

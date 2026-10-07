@@ -157,7 +157,7 @@ export const HomeLanding: React.FC = () => {
     }
     if (!booking) {
       setDemoFocus(3);
-      setPathHint("Iniciá la reserva para abrir el pago USD en Stellar.");
+      setPathHint("Iniciá la reserva para abrir el pago digital en USD.");
       scrollToId("sena");
       return;
     }
@@ -294,7 +294,7 @@ export const HomeLanding: React.FC = () => {
           />
         </section>
 
-        <section id="stellar" className="scroll-mt-36 border-y border-[#c4a962]/15 bg-[#0d1b2a]/40">
+        <section id="pago" className="scroll-mt-36 border-y border-[#c4a962]/15 bg-[#0d1b2a]/40">
           <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 space-y-8">
             <div id="experiencia" className="scroll-mt-36">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#c4a962]">
@@ -309,9 +309,8 @@ export const HomeLanding: React.FC = () => {
               </h2>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[#9ca3af]">
                 Precio de referencia en USD y ARS. La seña del{" "}
-                {MOXOTORO_CONFIG.pricing.depositPercentage}% confirma el cupo. El pago es USD en
-                Stellar <strong className="text-emerald-400">{MOXOTORO_CONFIG.stellar.network}</strong>
-                . El saldo se abona al iniciar la salida.
+                {MOXOTORO_CONFIG.pricing.depositPercentage}% confirma el cupo. El pago es digital en
+                USD. El saldo se abona al iniciar la salida.
               </p>
             </div>
 
@@ -655,10 +654,10 @@ export const HomeLanding: React.FC = () => {
                     Medio de pago
                   </p>
                   <p className="mt-1 text-base font-bold text-[#f5f0e8]">
-                    USD · Stellar {MOXOTORO_CONFIG.stellar.network}
+                    Pago digital en USD
                   </p>
                   <p className="mt-1 text-[11px] leading-relaxed text-[#9ca3af]">
-                    El checkout abre la seña existente (SEP-0007). Horizon verifica memo, destino, activo y monto.
+                    Confirmamos la referencia, el destino y el monto en USD de la seña.
                   </p>
                 </div>
 
@@ -669,7 +668,7 @@ export const HomeLanding: React.FC = () => {
                       {confirmedTxHash ? "Confirmado" : "Pendiente"}
                     </strong>
                     <span className="mt-1 block font-mono text-[10px] text-[#9ca3af]">
-                      Memo {booking.memoId}
+                      Código de reserva {booking.memoId}
                     </span>
                   </p>
                 )}
@@ -692,15 +691,15 @@ export const HomeLanding: React.FC = () => {
                     <p className="mt-1 text-xs">
                       Total {booking.totalPriceUsdc.toFixed(2)} USD · seña {booking.depositRequiredUsdc.toFixed(2)} USD
                     </p>
-                    <p className="mt-1 font-mono text-[10px] break-all">Memo {booking.memoId}</p>
-                    <p className="mt-1 font-mono text-[10px] break-all">Tx {confirmedTxHash}</p>
+                    <p className="mt-1 font-mono text-[10px] break-all">Código de reserva {booking.memoId}</p>
+                    <p className="mt-1 font-mono text-[10px] break-all">Comprobante {confirmedTxHash}</p>
                     <a
                       href={stellarExpertTxUrl(confirmedTxHash)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-2 inline-block font-medium text-emerald-300 underline"
                     >
-                      Ver en stellar.expert
+                      Ver comprobante del pago
                     </a>
                   </div>
                 )}
@@ -728,7 +727,7 @@ export const HomeLanding: React.FC = () => {
                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#c4a962] py-3 text-xs font-bold uppercase tracking-wider text-[#0a0a0a] hover:bg-[#dfc888]"
                   >
                     <Wallet className="h-4 w-4" />
-                    Continuar pago USD en Stellar
+                    Continuar el pago de la seña en USD
                   </button>
                 )}
 
@@ -757,8 +756,7 @@ export const HomeLanding: React.FC = () => {
                   Coordinar por WhatsApp
                 </a>
                 <p className="text-[10px] leading-relaxed text-[#9ca3af]">
-                  USD Testnet (emisor Circle) · verificación en Horizon. Solo clave pública
-                  receptora; no uses mainnet.
+                  La seña se paga en USD, de forma digital.
                 </p>
               </aside>
             </form>
@@ -780,8 +778,7 @@ export const HomeLanding: React.FC = () => {
               {MOXOTORO_CONFIG.brand.legalEntity} · {MOXOTORO_CONFIG.brand.historicalName}
             </p>
             <p className="mt-1 text-[11px] text-[#6b7280]">
-              Argentina Builder Challenge (BAF × Stellar) · pagos en{" "}
-              {MOXOTORO_CONFIG.stellar.network} únicamente
+              Argentina Builder Challenge (BAF) · pagos digitales en USD.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 text-xs">

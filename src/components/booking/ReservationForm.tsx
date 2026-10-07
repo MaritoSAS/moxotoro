@@ -334,7 +334,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           type="submit"
           className="rounded-xl bg-[#c4a962] px-6 py-3 text-xs font-bold uppercase tracking-wider text-[#0a0a0a] hover:bg-[#dfc888] transition-colors shadow-lg"
         >
-          Pagar seña con Stellar
+          Pagar la seña en USD
         </button>
       </div>
 
@@ -348,17 +348,17 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/40 p-4 text-sm text-emerald-100 space-y-1">
           <p className="font-semibold">Seña acreditada. Cupo reservado.</p>
           <p className="text-xs text-emerald-200/80">
-            {formatDateLongEs(checkoutBooking.date)} · {checkoutBooking.timeSlotLabel} · memo{" "}
+            {formatDateLongEs(checkoutBooking.date)} · {checkoutBooking.timeSlotLabel} · código{" "}
             <span className="font-mono">{checkoutBooking.memoId}</span>
           </p>
-          <p className="text-[11px] font-mono break-all text-emerald-200/70">Tx {paidTxHash}</p>
+          <p className="text-[11px] font-mono break-all text-emerald-200/70">Comprobante {paidTxHash}</p>
           <a
             href={stellarExpertTxUrl(paidTxHash)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block text-[11px] font-medium text-emerald-300 underline"
           >
-            Ver en stellar.expert
+            Ver comprobante del pago
           </a>
         </div>
       )}
