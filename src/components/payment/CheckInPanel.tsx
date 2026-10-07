@@ -59,7 +59,7 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({ booking, onCheckedIn
             rel="noopener noreferrer"
             className="mt-2 inline-block text-xs font-medium text-emerald-300 underline"
           >
-            Ver saldo en stellar.expert
+            Ver comprobante del saldo
           </a>
         )}
       </div>
@@ -91,7 +91,7 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({ booking, onCheckedIn
       <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#c4a962]">Saldo al iniciar</p>
       <p className="mt-1 text-2xl font-bold text-[#f5f0e8]">{booking.balanceDueUsdc.toFixed(2)} USD</p>
       <p className="mt-1 text-[11px] leading-relaxed text-[#9ca3af]">
-        El saldo se paga en USD por Stellar, con el mismo receptor y el mismo activo. El efectivo lo registra solo la administración.
+        El saldo se paga en USD, por el mismo medio. El efectivo lo registra solo la administración.
       </p>
       {!open ? (
         <button
@@ -105,12 +105,12 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({ booking, onCheckedIn
       ) : (
         <div className="mt-3 space-y-3">
           <p className="text-xs text-[#e8e2d6]">
-            Memo del saldo: <span className="font-mono text-[#c4a962]">{balanceMemo}</span>
+            Código del saldo: <span className="font-mono text-[#c4a962]">{balanceMemo}</span>
           </p>
           {qrDataUrl && (
             <img
               src={qrDataUrl}
-              alt="Código QR para pagar el saldo en Stellar"
+              alt="Código QR para pagar el saldo en USD"
               className="mx-auto h-44 w-44 rounded-lg bg-[#f5f0e8] p-2"
             />
           )}
@@ -118,7 +118,7 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({ booking, onCheckedIn
             href={sepUri}
             className="flex w-full items-center justify-center rounded-xl border border-[#c4a962]/40 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#e8e2d6] hover:border-[#c4a962]"
           >
-            Abrir pago SEP-0007
+            Abrir el pago del saldo
           </a>
           <button
             type="button"
@@ -127,7 +127,7 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({ booking, onCheckedIn
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0d3d47] py-3 text-xs font-bold uppercase tracking-wider text-[#f5f0e8] hover:bg-[#165260] disabled:opacity-60"
           >
             {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4 text-[#c4a962]" />}
-            Verificar saldo en Horizon
+            Verificar el saldo
           </button>
           {message && <p className="text-xs leading-relaxed text-amber-200">{message}</p>}
         </div>

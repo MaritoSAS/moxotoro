@@ -176,7 +176,7 @@ export async function confirmCheckInFromHorizon(value: unknown): Promise<Booking
       ok: false,
       persisted: false,
       booking: draft,
-      error: "La seña todavía no está verificada en Horizon.",
+      error: "La seña todavía no está acreditada.",
       verification: deposit,
     };
   }
@@ -185,7 +185,7 @@ export async function confirmCheckInFromHorizon(value: unknown): Promise<Booking
   try {
     balanceMemo = balanceMemoId(draft.memoId);
   } catch {
-    return { ok: false, persisted: false, error: "El memo del saldo no entra en 28 bytes." };
+    return { ok: false, persisted: false, error: "No se pudo preparar el código del saldo." };
   }
 
   const verification = await verifyTransactionByMemo(balanceMemo, draft.balanceDueUsdc, "balance");

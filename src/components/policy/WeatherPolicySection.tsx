@@ -9,7 +9,7 @@ export const WeatherPolicySection: React.FC = () => {
   // Simulator state for demo and challenge evaluation
   const [simulatedStatus, setSimulatedStatus] = useState<BookingStatus>("deposit_paid");
   const [incidentLog, setIncidentLog] = useState<string[]>([
-    "Reserva creada con seña del 50% acreditada vía Stellar (Estado: 🟡 Con seña).",
+    "Reserva creada con seña del 50% acreditada (Estado: 🟡 Con seña).",
   ]);
 
   const appendLog = (...messages: string[]) => {
@@ -57,14 +57,14 @@ export const WeatherPolicySection: React.FC = () => {
     setSimulatedStatus("exceptional_refund");
     appendLog(
       "🔴 PASO 3 (Último recurso): Tras agotar instancias 1 y 2 sin coincidencia justificada, se autorizó devolución excepcional de la seña.",
-      "Registro inmutable emitido on-chain con hash de retorno en Stellar.",
+      "Quedó registrado el reembolso excepcional de la seña.",
     );
   };
 
   const resetSimulator = () => {
     setSimulatedStatus("deposit_paid");
     setIncidentLog([
-      "Simulador reiniciado: Reserva creada con seña del 50% acreditada vía Stellar (Estado: 🟡 Con seña).",
+      "Simulador reiniciado: Reserva creada con seña del 50% acreditada (Estado: 🟡 Con seña).",
     ]);
   };
 

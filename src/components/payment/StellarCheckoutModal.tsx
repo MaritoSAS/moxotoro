@@ -38,7 +38,7 @@ const PAYMENT_STATE_CLASS: Record<PaymentVisualState, string> = {
 function horizonFailureCopy(message: string | null): string {
   if (!message) return "No se pudo confirmar la seña.";
   if (message === "Failed to fetch" || message === "Load failed" || message.startsWith("NetworkError")) {
-    return "No se pudo consultar Stellar Horizon.";
+    return "No pudimos confirmar el pago en este momento.";
   }
   return message;
 }
@@ -166,14 +166,14 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="font-bold text-base text-[#f5f0e8]">
-                  {modalStep === 6 ? "6 · Confirmación" : modalStep === 5 ? "5 · Verificación" : "4 · Stellar"}
+                  {modalStep === 6 ? "6 · Confirmación" : modalStep === 5 ? "5 · Verificación" : "4 · Pago"}
                 </h3>
                 <span className="inline-flex items-center rounded-full border border-emerald-400/50 bg-emerald-400/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
-                  {MOXOTORO_CONFIG.stellar.network}
+                  USD
                 </span>
               </div>
               <p className="text-[11px] text-[#9ca3af]">
-                {MOXOTORO_CONFIG.stellar.network} · verificación en Horizon
+                Pago digital en USD
               </p>
             </div>
           </div>
@@ -222,7 +222,7 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
         <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/30 px-3 py-2">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-300">Medio de pago</p>
           <p className="text-sm font-bold text-[#f5f0e8]">
-            USD · Stellar {MOXOTORO_CONFIG.stellar.network}
+            Pago digital en USD
           </p>
         </div>
 
@@ -237,22 +237,22 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
           <p className="text-xl font-bold">{PAYMENT_STATE_LABEL[phase]}</p>
           {phase === "confirmed" && confirmedTxHash && (
             <>
-              <p>Seña verificada en Horizon (Testnet). Cupo reservado.</p>
-              <p className="font-mono text-[10px] break-all">Memo {booking.memoId}</p>
-              <p className="font-mono text-[10px] break-all">Tx {confirmedTxHash}</p>
+              <p>Seña verificada. Cupo reservado.</p>
+              <p className="font-mono text-[10px] break-all">Código de reserva {booking.memoId}</p>
+              <p className="font-mono text-[10px] break-all">Comprobante {confirmedTxHash}</p>
               <a
                 href={stellarExpertTxUrl(confirmedTxHash)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block font-medium text-emerald-300 underline break-all"
               >
-                Ver en stellar.expert
+                Ver comprobante del pago
               </a>
             </>
           )}
           {phase === "pending" && (
             <p>
-              {verificationMessage ?? "Esperando la acreditación en Horizon."}
+              {verificationMessage ?? "Esperando que se acredite la seña."}
             </p>
           )}
           {phase === "failed" && (
@@ -270,12 +270,12 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
             {isVerifying ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin text-[#c4a962]" />
-                <span>Consultando Stellar Horizon Ledger...</span>
+                <span>Estamos confirmando tu seña...</span>
               </>
             ) : (
               <>
                 <ShieldCheck className="h-4 w-4 text-[#c4a962]" />
-                <span>Verificar Acreditación de Seña en Stellar</span>
+                <span>Verificar que la seña se acreditó</span>
               </>
             )}
           </button>
@@ -301,7 +301,7 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
           {qrDataUrl ? (
             <img
               src={qrDataUrl}
-              alt="Código QR de Pago Stellar"
+              alt="Código QR para pagar la seña en USD"
               className="h-40 w-40 rounded-lg border-2 border-[#c4a962]/40 p-1 bg-[#f5f0e8]"
             />
           ) : (
@@ -310,35 +310,34 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
             </div>
           )}
           <span className="mt-2 text-[11px] text-[#9ca3af] text-center">
-            Escaneá con <strong>LOBSTR</strong>, <strong>Freighter</strong> o cualquier billetera compatible con Stellar (SEP-0007).
+            Escaneá el código para pagar la seña en USD.
           </span>
         </div>
 
         {/* Payment Details (Address & MEMO) */}
         <div className="space-y-2.5 text-xs">
           <div>
-            <label className="text-[11px] text-[#9ca3af] mb-1 block">Cuenta Pública Receptora (Moxotoro):</label>
+            <label className="text-[11px] text-[#9ca3af] mb-1 block">Cuenta de cobro de Moxotoro</label>
             <div className="flex items-start justify-between gap-2 rounded-lg bg-[#0a0a0a] border border-white/10 px-3 py-2 font-mono text-[11px] text-[#e8e2d6]">
               <span className="min-w-0 flex-1 break-all">{MOXOTORO_CONFIG.stellar.receiverPublicKey}</span>
               <button
                 type="button"
                 onClick={() => copyToClipboard(MOXOTORO_CONFIG.stellar.receiverPublicKey, "key")}
                 className="text-[#c4a962] hover:text-[#dfc888]"
-                title="Copiar dirección pública"
+                title="Copiar cuenta de cobro"
               >
                 {copiedKey ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </button>
             </div>
             <p className="mt-1 text-[10px] leading-relaxed text-[#9ca3af]">
-              USD Testnet · emisor Circle{" "}
-              <span className="font-mono break-all">{MOXOTORO_CONFIG.stellar.assetIssuer}</span>
+              Pagá en USD e incluí el código de la reserva.
             </p>
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[11px] text-[#9ca3af]">MEMO de Reserva (Obligatorio para acreditar seña):</label>
-              <span className="text-[10px] text-amber-400 font-medium">No olvidar ingresar el Memo</span>
+              <label className="text-[11px] text-[#9ca3af]">Código de la reserva (hace falta para acreditar la seña):</label>
+              <span className="text-[10px] text-amber-400 font-medium">No te olvides de incluir este código</span>
             </div>
             <div className="flex items-center justify-between rounded-lg bg-[#0a0a0a] border border-[#c4a962]/40 px-3 py-2 font-mono text-sm font-bold text-[#c4a962]">
               <span>{booking.memoId}</span>
@@ -346,7 +345,7 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
                 type="button"
                 onClick={() => copyToClipboard(booking.memoId, "memo")}
                 className="text-[#c4a962] hover:text-[#dfc888]"
-                title="Copiar MEMO"
+                title="Copiar código de la reserva"
               >
                 {copiedMemo ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </button>
@@ -360,9 +359,8 @@ export const StellarCheckoutModal: React.FC<StellarCheckoutModalProps> = ({
 };
 
 function senaProviderNote(): string {
-  const { brand, stellar } = MOXOTORO_CONFIG;
-  const networkLabel = stellar.network === "TESTNET" ? "Testnet" : stellar.network;
+  const { brand } = MOXOTORO_CONFIG;
   const maybeFounder = (brand as { founder?: string }).founder;
   const founder = typeof maybeFounder === "string" && maybeFounder.length > 0 ? maybeFounder : "Mariana";
-  return `Seña a ${brand.name} (${networkLabel}); experiencia ${brand.historicalName} / ${founder}`;
+  return `Seña a ${brand.name}. Experiencia ${brand.historicalName}, con ${founder}.`;
 }

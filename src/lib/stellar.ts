@@ -153,8 +153,8 @@ export async function verifyTransactionByMemo(
         timestamp: record.created_at,
         message:
           purpose === "balance"
-            ? "Saldo verificado en Horizon testnet."
-            : "Seña verificada en Horizon testnet.",
+            ? "Saldo verificado."
+            : "Seña verificada. Cupo reservado.",
       };
     }
 
@@ -164,8 +164,8 @@ export async function verifyTransactionByMemo(
         outcome: "failed",
         message:
           purpose === "balance"
-            ? `Hay un pago USD con ese memo, pero el monto no coincide con el saldo de ${expectedAmountUsdc.toFixed(2)} USD.`
-            : `Hay un pago USD con ese memo, pero el monto no coincide con la seña de ${expectedAmountUsdc.toFixed(2)} USD.`,
+            ? `Hay un pago en USD con ese código, pero el monto no coincide con el saldo de ${expectedAmountUsdc.toFixed(2)} USD.`
+            : `Hay un pago en USD con ese código, pero el monto no coincide con la seña de ${expectedAmountUsdc.toFixed(2)} USD.`,
       };
     }
 
@@ -174,7 +174,7 @@ export async function verifyTransactionByMemo(
         verified: false,
         outcome: "failed",
         message:
-          "Hay un pago con ese memo, pero el activo no es el USD del emisor configurado.",
+          "Hay un pago con ese código, pero no está en USD.",
       };
     }
 
@@ -183,8 +183,8 @@ export async function verifyTransactionByMemo(
       outcome: "pending",
       message:
         purpose === "balance"
-          ? "No se detectó aún la transacción del saldo en el ledger."
-          : "No se detectó aún la transacción con el identificador de seña en el ledger.",
+          ? "No se detectó aún el pago del saldo. Si recién lo enviaste, esperá un momento y volvé a verificar."
+          : "No se detectó aún el pago de la seña. Si recién lo enviaste, esperá un momento y volvé a verificar.",
     };
   } catch (error) {
     const status =
@@ -200,14 +200,14 @@ export async function verifyTransactionByMemo(
         verified: false,
         outcome: "failed",
         message:
-          "La cuenta receptora todavía no aparece en Horizon testnet. Fondeala con Friendbot y reintentá.",
+          "Todavía no podemos confirmar la cuenta de cobro. Escribinos por WhatsApp y lo vemos juntos.",
       };
     }
 
     return {
       verified: false,
       outcome: "failed",
-      message: error instanceof Error ? error.message : "Error al consultar Stellar Horizon",
+      message: "No pudimos confirmar el pago en este momento. Probá de nuevo en un ratito.",
     };
   }
 }

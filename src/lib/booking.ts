@@ -267,7 +267,7 @@ export function buildWhatsAppReservationUrl(params: {
       `Opción: ${params.optionTitle}`,
       `Participantes: ${params.participantsCount}`,
       `Extensión Walpac: ${walpacLine}`,
-      `Seña estimada: ${params.depositUsdc.toFixed(2)} USD (testnet)`,
+      `Seña estimada: ${params.depositUsdc.toFixed(2)} USD`,
     ].join("\n"),
   );
   return `${MOXOTORO_CONFIG.contact.whatsAppDirectUrl}?text=${text}`;
